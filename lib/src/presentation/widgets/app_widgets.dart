@@ -132,10 +132,7 @@ class InfoRow extends StatelessWidget {
             width: 118,
             child: Text(
               label,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: OceanColors.muted,
                     fontWeight: FontWeight.w600,
                   ),
@@ -245,8 +242,8 @@ class _PhotoFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
+    return const DecoratedBox(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,

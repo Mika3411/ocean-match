@@ -278,7 +278,6 @@ class _DiscoveryCardState extends State<_DiscoveryCard> {
 
   @override
   Widget build(BuildContext context) {
-    final profile = discoveryProfile.profile;
     final photo = discoveryProfile.primaryPhoto;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
@@ -609,7 +608,8 @@ class _ProfileCardBody extends StatelessWidget {
                   ],
                 ),
                 const Spacer(),
-                if (!isTight) _CompatibilityNotice(score: discoveryProfile.score),
+                if (!isTight)
+                  _CompatibilityNotice(score: discoveryProfile.score),
                 if (!isTight) const SizedBox(height: 14),
                 OutlinedButton(
                   onPressed: onOpenDetails,
@@ -685,9 +685,9 @@ class _CardPager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         _PagerSegment(active: true),
         SizedBox(width: 6),
         _PagerSegment(active: false),
@@ -815,12 +815,11 @@ class _ProfileDetailsSheet extends StatelessWidget {
                       profile.firstName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style:
-                          Theme.of(context).textTheme.displaySmall?.copyWith(
-                                fontFamily: 'Georgia',
-                                color: OceanColors.sand,
-                                fontWeight: FontWeight.w400,
-                              ),
+                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                            fontFamily: 'Georgia',
+                            color: OceanColors.sand,
+                            fontWeight: FontWeight.w400,
+                          ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -843,7 +842,8 @@ class _ProfileDetailsSheet extends StatelessWidget {
                 runSpacing: 8,
                 children: [
                   OceanBadge(
-                    label: _boardStatusLabel(discoveryProfile.lifeAboard.status),
+                    label:
+                        _boardStatusLabel(discoveryProfile.lifeAboard.status),
                     icon: Icons.directions_boat_filled,
                     color: OceanColors.gold,
                   ),
@@ -944,7 +944,8 @@ class _ProfileDetailsSheet extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      for (final tag in discoveryProfile.lifeAboard.lifestyleTags)
+                      for (final tag
+                          in discoveryProfile.lifeAboard.lifestyleTags)
                         OceanBadge(
                           label: tag,
                           color: OceanColors.gold,
