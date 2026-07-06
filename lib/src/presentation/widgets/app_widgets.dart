@@ -19,12 +19,13 @@ class AppLogo extends StatelessWidget {
           width: compact ? 36 : 48,
           height: compact ? 36 : 48,
           decoration: BoxDecoration(
-            color: OceanColors.harborBlue,
+            color: OceanColors.cardAlt,
             borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: OceanColors.line),
           ),
           child: Icon(
-            Icons.explore,
-            color: Colors.white,
+            Icons.directions_boat_filled,
+            color: OceanColors.gold,
             size: compact ? 22 : 30,
           ),
         ),
@@ -32,8 +33,9 @@ class AppLogo extends StatelessWidget {
         Text(
           'Ocean Match',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-                color: OceanColors.ink,
+                fontFamily: 'Georgia',
+                fontWeight: FontWeight.w600,
+                color: OceanColors.sand,
               ),
         ),
       ],
@@ -58,6 +60,8 @@ class SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -77,7 +81,10 @@ class SectionCard extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w800),
+                                ?.copyWith(
+                                  color: OceanColors.gold,
+                                  fontWeight: FontWeight.w800,
+                                ),
                           ),
                           if (subtitle != null) ...[
                             const SizedBox(height: 4),
@@ -128,7 +135,10 @@ class InfoRow extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodySmall
-                  ?.copyWith(color: OceanColors.muted),
+                  ?.copyWith(
+                    color: OceanColors.muted,
+                    fontWeight: FontWeight.w600,
+                  ),
             ),
           ),
           Expanded(
@@ -136,7 +146,7 @@ class InfoRow extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: OceanColors.ink,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                   ),
             ),
           ),
@@ -150,7 +160,7 @@ class OceanBadge extends StatelessWidget {
   const OceanBadge({
     required this.label,
     this.icon,
-    this.color = OceanColors.harborBlue,
+    this.color = OceanColors.gold,
     super.key,
   });
 
@@ -164,8 +174,8 @@ class OceanBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.22)),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: color.withValues(alpha: 0.32)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -178,7 +188,7 @@ class OceanBadge extends StatelessWidget {
             label,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   color: color,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w800,
                 ),
           ),
         ],
@@ -235,10 +245,23 @@ class _PhotoFallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: OceanColors.mist,
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF2B3E55),
+            OceanColors.deepBlue,
+          ],
+        ),
+      ),
       child: Center(
-        child: Icon(Icons.image_not_supported_outlined, color: OceanColors.muted),
+        child: Icon(
+          Icons.directions_boat_filled,
+          color: OceanColors.gold,
+          size: 72,
+        ),
       ),
     );
   }

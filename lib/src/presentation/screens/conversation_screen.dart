@@ -207,14 +207,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
             margin: const EdgeInsets.symmetric(vertical: 4),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
-              color: isMine ? OceanColors.harborBlue : Colors.white,
+              color: isMine ? OceanColors.gold : OceanColors.cardAlt,
               borderRadius: BorderRadius.circular(8),
-              border: isMine ? null : Border.all(color: OceanColors.mist),
+              border: isMine ? null : Border.all(color: OceanColors.line),
             ),
             child: Text(
               message.content,
               style: TextStyle(
-                color: isMine ? Colors.white : OceanColors.ink,
+                color: isMine ? OceanColors.midnight : OceanColors.ink,
               ),
             ),
           ),

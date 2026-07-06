@@ -39,7 +39,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
       body: IndexedStack(index: _index, children: pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
-        indicatorColor: OceanColors.seaTeal.withValues(alpha: 0.16),
+        indicatorColor: OceanColors.gold.withValues(alpha: 0.16),
         onDestinationSelected: (index) => setState(() => _index = index),
         destinations: const [
           NavigationDestination(
