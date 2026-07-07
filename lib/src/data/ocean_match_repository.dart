@@ -179,7 +179,7 @@ class MockOceanMatchRepository implements OceanMatchRepository {
     }
     if (account.status == AccountStatus.suspended) {
       throw const OceanMatchException(
-        'Ce compte est suspendu. Contactez le support Ocean Match.',
+        'Ce compte est suspendu. Contactez le support BlueWater Match.',
       );
     }
     final updated = account.copyWith(lastLoginAt: DateTime.now());
@@ -714,7 +714,7 @@ class MockOceanMatchRepository implements OceanMatchRepository {
     }
     if (account.status == AccountStatus.suspended) {
       throw const OceanMatchException(
-        'Ce compte est suspendu. Contactez le support Ocean Match.',
+        'Ce compte est suspendu. Contactez le support BlueWater Match.',
       );
     }
     return account;

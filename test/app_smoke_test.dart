@@ -16,23 +16,28 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Ocean Match app starts on the welcome screen', (tester) async {
+  testWidgets('BlueWater Match app starts on the welcome screen',
+      (tester) async {
     await pumpApp(tester);
 
-    expect(find.text('Ocean Match'), findsOneWidget);
-    expect(find.text('Creer mon compte'), findsOneWidget);
+    expect(
+      find.text('Rencontrez des personnes qui partagent la vie à bord.'),
+      findsOneWidget,
+    );
+    expect(find.text('Créer un compte'), findsOneWidget);
   });
 
   testWidgets('new users sign up and must verify email before onboarding',
       (tester) async {
     await pumpApp(tester);
 
+    await tapText(tester, 'Créer un compte');
     await tester.enterText(
       find.byType(TextFormField).at(0),
       'camille.mvp@example.com',
     );
     await tester.enterText(find.byType(TextFormField).at(1), 'password123');
-    await tapText(tester, 'Creer mon compte');
+    await tapText(tester, 'Créer un compte');
 
     expect(find.text('Verifiez votre email'), findsOneWidget);
     expect(find.textContaining('camille.mvp@example.com'), findsOneWidget);
@@ -48,12 +53,13 @@ void main() {
       (tester) async {
     await pumpApp(tester);
 
+    await tapText(tester, 'Créer un compte');
     await tester.enterText(
       find.byType(TextFormField).at(0),
       'onboarding.mvp@example.com',
     );
     await tester.enterText(find.byType(TextFormField).at(1), 'password123');
-    await tapText(tester, 'Creer mon compte');
+    await tapText(tester, 'Créer un compte');
     await tapText(tester, 'J ai verifie mon email');
 
     expect(find.text('1. Identite'), findsOneWidget);
@@ -106,19 +112,20 @@ void main() {
       (tester) async {
     await pumpApp(tester);
 
+    await tapText(tester, 'Créer un compte');
     await tester.enterText(
       find.byType(TextFormField).at(0),
       'reset@example.com',
     );
-    await tapText(tester, 'Mot de passe oublie');
+    await tapText(tester, 'Mot de passe oublié');
 
-    expect(find.textContaining('lien de reinitialisation'), findsOneWidget);
+    expect(find.textContaining('lien de réinitialisation'), findsOneWidget);
   });
 
   testWidgets('verified users can log in and log out', (tester) async {
     await pumpApp(tester);
 
-    await tapText(tester, 'Connexion');
+    await tapText(tester, 'Se connecter');
     await tester.enterText(
       find.byType(TextFormField).at(0),
       'lea.demo@oceanmatch.app',
@@ -138,6 +145,6 @@ void main() {
     await tester.tap(logoutButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('Creer mon compte'), findsOneWidget);
+    expect(find.text('Créer un compte'), findsOneWidget);
   });
 }

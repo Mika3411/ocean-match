@@ -359,7 +359,7 @@ class OceanMatchController extends ChangeNotifier {
     }
     if (user.status == AccountStatus.suspended) {
       throw const OceanMatchException(
-        'Ce compte est suspendu. Contactez le support Ocean Match.',
+        'Ce compte est suspendu. Contactez le support BlueWater Match.',
       );
     }
     if (user.status == AccountStatus.deleted) {

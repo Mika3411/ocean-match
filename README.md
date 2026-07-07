@@ -1,6 +1,6 @@
-# Ocean Match MVP
+# BlueWater Match MVP
 
-Application Flutter iOS/Android pour tester le concept Ocean Match : une app de rencontre pour personnes vivant, naviguant ou projetant de vivre en bateau.
+Application Flutter iOS/Android pour tester le concept BlueWater Match : une app de rencontre pour personnes vivant, naviguant ou projetant de vivre en bateau.
 
 ## Statut
 

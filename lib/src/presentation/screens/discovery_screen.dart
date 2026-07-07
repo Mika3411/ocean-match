@@ -151,7 +151,15 @@ class _DiscoveryHeader extends StatelessWidget {
           children: [
             Row(
               children: [
-                const AppLogo(compact: true),
+                const Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: AppLogo(compact: true),
+                    ),
+                  ),
+                ),
                 const Spacer(),
                 _HeaderIconButton(
                   tooltip: 'Actualiser',
@@ -181,11 +189,11 @@ class _DiscoveryHeader extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoldText(
                         'Decouvrir',
                         style: OceanTypography.display(context),
                       ),
-                      Text(
+                      GoldText(
                         'des profils',
                         style: OceanTypography.display(
                           context,
@@ -648,7 +656,7 @@ class _ProfileCardBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Flexible(
-                      child: Text(
+                      child: GoldText(
                         profile.firstName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -753,7 +761,7 @@ class _ProfilePhotoFallback extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFF304860),
+            OceanColors.harborBlue,
             OceanColors.deepBlue,
             OceanColors.obsidian,
           ],
@@ -908,7 +916,7 @@ class _ProfileDetailsSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Flexible(
-                    child: Text(
+                    child: GoldText(
                       profile.firstName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -1192,7 +1200,7 @@ class _ScoreBar extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Text(
+        GoldText(
           'Profil $score%',
           style: OceanTypography.sectionLabel(context),
         ),
@@ -1217,7 +1225,7 @@ class _DetailSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoldText(
             title,
             style: OceanTypography.sectionLabel(context),
           ),

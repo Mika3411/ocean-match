@@ -101,7 +101,7 @@ class _ReportSheetState extends State<_ReportSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoldText(
             'Signaler ${widget.targetName}',
             style: OceanTypography.title(context, fontSize: 30),
           ),

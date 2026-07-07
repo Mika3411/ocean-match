@@ -1,4 +1,4 @@
-# Deployer Ocean Match sur Render
+# Deployer BlueWater Match sur Render
 
 Le fichier `render.yaml` cree maintenant toute la pile MVP :
 
@@ -12,7 +12,7 @@ Le fichier `render.yaml` cree maintenant toute la pile MVP :
 2. Ouvre Render.
 3. Clique sur **New +**.
 4. Choisis **Blueprint**.
-5. Selectionne le repository Ocean Match.
+5. Selectionne le repository BlueWater Match.
 6. Render lit `render.yaml`.
 7. Clique sur **Apply**.
 

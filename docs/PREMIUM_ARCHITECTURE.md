@@ -1,4 +1,4 @@
-# Architecture Premium Ocean Match
+# Architecture Premium BlueWater Match
 
 Objectif : preparer les options Premium sans les activer dans le MVP et sans
 fragiliser la boucle gratuite actuelle : match reciproque puis messagerie texte

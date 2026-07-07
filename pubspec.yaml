@@ -1,5 +1,5 @@
 name: ocean_match
-description: MVP Flutter for Ocean Match, a nautical dating app.
+description: MVP Flutter for BlueWater Match, a nautical dating app.
 publish_to: "none"
 version: 0.1.0+1
 
@@ -21,6 +21,12 @@ flutter:
   assets:
     - assets/images/
   fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+    - family: Cormorant Garamond
+      fonts:
+        - asset: assets/fonts/CormorantGaramond-Variable.ttf
     - family: Parisienne
       fonts:
         - asset: assets/fonts/Parisienne-Regular.ttf

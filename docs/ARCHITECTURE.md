@@ -1,4 +1,4 @@
-# Architecture technique MVP Ocean Match
+# Architecture technique MVP BlueWater Match
 
 ## Objectif
 

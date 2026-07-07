@@ -1,4 +1,4 @@
-# Backend Ocean Match
+# Backend BlueWater Match
 
 Ce document decrit la base technique backend implementee dans `backend/`.
 

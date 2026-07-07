@@ -327,7 +327,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       children: [
         SectionCard(
           title: '7. Zones larges',
-          subtitle: 'Ocean Match ne collecte pas de position exacte.',
+          subtitle: 'BlueWater Match ne collecte pas de position exacte.',
           child: Column(
             children: [
               DropdownButtonFormField<String>(

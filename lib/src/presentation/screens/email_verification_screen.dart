@@ -40,7 +40,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           children: [
             const AppLogo(),
             const SizedBox(height: 28),
-            Text(
+            GoldText(
               'Verifiez votre email',
               style: OceanTypography.title(context, fontSize: 34),
             ),

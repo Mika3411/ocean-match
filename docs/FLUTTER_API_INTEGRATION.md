@@ -1,4 +1,4 @@
-# Integration Flutter avec l API Ocean Match
+# Integration Flutter avec l API BlueWater Match
 
 L app Flutter actuelle utilise `OceanMatchRepository`. L integration backend se
 fait en ajoutant une implementation `ApiOceanMatchRepository` dans

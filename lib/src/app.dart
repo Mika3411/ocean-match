@@ -28,7 +28,7 @@ class _OceanMatchAppState extends State<OceanMatchApp> {
     return OceanMatchScope(
       controller: _controller,
       child: MaterialApp(
-        title: 'Ocean Match',
+        title: 'BlueWater Match',
         debugShowCheckedModeBanner: false,
         theme: OceanTheme.light(),
         home: const AuthGate(),

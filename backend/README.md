@@ -1,6 +1,6 @@
-# Ocean Match Backend
+# BlueWater Match Backend
 
-API REST personnalisee pour Ocean Match, avec PostgreSQL, validation serveur,
+API REST personnalisee pour BlueWater Match, avec PostgreSQL, validation serveur,
 auth par access token court et refresh token revocable, stockage photo externe
 prepare et architecture compatible Premium.
 

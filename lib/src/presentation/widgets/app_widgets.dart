@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import '../../core/app_theme.dart';
 import '../../domain/models.dart';
 
+const bwmCompassMarkAsset = 'assets/images/bwm-compass-mark.png';
+const bwmLogoFinalAsset = 'assets/images/bwm-logo-final.png';
+
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.compact = false});
 
@@ -16,53 +19,127 @@ class AppLogo extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: markSize,
-          height: markSize,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const RadialGradient(
-              center: Alignment(-0.35, -0.45),
-              radius: 0.95,
-              colors: [
-                Color(0xFF24384E),
-                OceanColors.obsidian,
-              ],
-            ),
-            border: Border.all(
-              color: OceanColors.champagne.withValues(alpha: 0.72),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: OceanColors.coral.withValues(alpha: 0.18),
-                blurRadius: compact ? 18 : 24,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Icon(
-                Icons.anchor_rounded,
-                color: OceanColors.champagne,
-                size: compact ? 24 : 32,
-              ),
-              Positioned(
-                bottom: compact ? 7 : 9,
-                child: Icon(
-                  Icons.favorite_rounded,
-                  color: OceanColors.coral,
-                  size: compact ? 8 : 10,
-                ),
-              ),
-            ],
-          ),
-        ),
+        PremiumLogoMark(size: markSize),
         const SizedBox(width: 12),
-        Text(
-          'Ocean Match',
+        GoldText(
+          'BlueWater Match',
           style: OceanTypography.brand(context, compact: compact),
+        ),
+      ],
+    );
+  }
+}
+
+class PremiumLogoMark extends StatelessWidget {
+  const PremiumLogoMark({required this.size, super.key});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: size,
+      child: Image.asset(
+        bwmCompassMarkAsset,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.high,
+        errorBuilder: (context, error, stackTrace) {
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: OceanColors.copper, width: 1.6),
+            ),
+            child: const Icon(
+              Icons.explore_outlined,
+              color: OceanColors.copper,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class GoldText extends StatelessWidget {
+  const GoldText(
+    this.text, {
+    required this.style,
+    this.maxLines,
+    this.overflow,
+    this.softWrap,
+    this.textAlign,
+    this.semanticsLabel,
+    super.key,
+  });
+
+  final String text;
+  final TextStyle? style;
+  final int? maxLines;
+  final TextOverflow? overflow;
+  final bool? softWrap;
+  final TextAlign? textAlign;
+  final String? semanticsLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolvedStyle =
+        style ?? Theme.of(context).textTheme.titleLarge ?? const TextStyle();
+    final fontSize = resolvedStyle.fontSize ?? 32;
+    final strokeWidth = (fontSize * 0.032).clamp(1.0, 2.6).toDouble();
+    final strokeStyle = resolvedStyle.copyWith(
+      foreground: Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = strokeWidth
+        ..strokeJoin = StrokeJoin.round
+        ..color = const Color(0xFF6D3506),
+      shadows: OceanTypography.goldTitleShadows,
+    );
+    final fillStyle = resolvedStyle.copyWith(
+      color: Colors.white,
+      shadows: const [
+        Shadow(
+          color: Color(0x99FFFFFF),
+          offset: Offset(-0.5, -0.7),
+          blurRadius: 0.8,
+        ),
+      ],
+    );
+
+    Widget textWithStyle(TextStyle textStyle) {
+      return Text(
+        text,
+        maxLines: maxLines,
+        overflow: overflow,
+        semanticsLabel: semanticsLabel,
+        softWrap: softWrap,
+        style: textStyle,
+        textAlign: textAlign,
+      );
+    }
+
+    Widget strokeText() {
+      return RichText(
+        maxLines: maxLines,
+        overflow: overflow ?? TextOverflow.clip,
+        softWrap: softWrap ?? true,
+        text: TextSpan(text: text, style: strokeStyle),
+        textAlign: textAlign ?? TextAlign.start,
+        textDirection: Directionality.of(context),
+      );
+    }
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        ExcludeSemantics(child: strokeText()),
+        ShaderMask(
+          blendMode: BlendMode.srcIn,
+          shaderCallback: (bounds) {
+            return OceanTypography.goldGradient.createShader(
+              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+            );
+          },
+          child: textWithStyle(fillStyle),
         ),
       ],
     );
@@ -89,7 +166,7 @@ class OceanBackground extends StatelessWidget {
           colors: [
             OceanColors.abyss,
             OceanColors.midnight,
-            Color(0xFF0E1B28),
+            OceanColors.deep,
           ],
         ),
       ),
@@ -153,7 +230,7 @@ class SectionCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            GoldText(
                               title!,
                               style: OceanTypography.sectionLabel(context),
                             ),
@@ -329,7 +406,7 @@ class _PhotoFallback extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFF304860),
+            OceanColors.harborBlue,
             OceanColors.deepBlue,
             OceanColors.obsidian,
           ],
@@ -359,7 +436,7 @@ class PrivacyNote extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-              'Votre position exacte de bateau n est jamais affichee. Ocean Match utilise seulement des zones larges.',
+              'Votre position exacte de bateau n est jamais affichee. BlueWater Match utilise seulement des zones larges.',
             ),
           ),
         ],

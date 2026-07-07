@@ -1,79 +1,119 @@
 import 'package:flutter/material.dart';
 
 class OceanColors {
-  static const abyss = Color(0xFF07111B);
-  static const obsidian = Color(0xFF0A1018);
-  static const midnight = Color(0xFF0B141E);
-  static const deepBlue = Color(0xFF101D2A);
-  static const harborBlue = Color(0xFF1B2B3D);
-  static const seaTeal = Color(0xFF7BC7B3);
-  static const coral = Color(0xFFFF7668);
-  static const blush = Color(0xFFFFB7A8);
-  static const rose = Color(0xFFEFA6B6);
-  static const lavender = Color(0xFFD8C9FF);
-  static const gold = Color(0xFFE7C75F);
-  static const champagne = Color(0xFFFFDFA8);
-  static const copper = Color(0xFFC98A5D);
-  static const sand = Color(0xFFF4EDDE);
-  static const mist = Color(0xFF293747);
-  static const ink = Color(0xFFF7F1E6);
-  static const muted = Color(0xFF9AA7B5);
-  static const line = Color(0xFF35465A);
-  static const glassLine = Color(0x55FFDFA8);
-  static const card = Color(0xFF182637);
-  static const cardAlt = Color(0xFF213247);
-  static const glass = Color(0xDE101D2A);
-  static const glassStrong = Color(0xF0182637);
+  static const navy = Color(0xFF16273D);
+  static const deep = Color(0xFF102A43);
+  static const cream = Color(0xFFE8EEF5);
+  static const copper = Color(0xFFC88048);
+
+  static const abyss = Color(0xFF0A1B2C);
+  static const obsidian = Color(0xFF081522);
+  static const midnight = navy;
+  static const deepBlue = deep;
+  static const harborBlue = Color(0xFF1F3A56);
+  static const seaTeal = Color(0xFF6EA6A6);
+  static const coral = copper;
+  static const blush = Color(0xFFD69A65);
+  static const rose = Color(0xFFD7B18F);
+  static const lavender = cream;
+  static const gold = copper;
+  static const champagne = cream;
+  static const sand = cream;
+  static const mist = Color(0xFF2A4058);
+  static const ink = cream;
+  static const muted = Color(0xFFA8B3C1);
+  static const line = Color(0xFF314B66);
+  static const glassLine = Color(0x66C88048);
+  static const card = navy;
+  static const cardAlt = deep;
+  static const glass = Color(0xDE16273D);
+  static const glassStrong = Color(0xF016273D);
 }
 
 class OceanTypography {
-  static const scriptFamily = 'Parisienne';
-  static const scriptFallback = [
-    'Segoe Script',
-    'Brush Script MT',
-    'Lucida Handwriting',
+  static const uiFamily = 'Inter';
+  static const uiFallback = ['Segoe UI', 'Arial'];
+  static const brandFamily = 'Cormorant Garamond';
+  static const brandFallback = [
+    'Playfair Display',
     'Georgia',
+    'Times New Roman',
   ];
-  static const serifFamily = 'Georgia';
-  static const serifFallback = ['Times New Roman'];
+  static const scriptFamily = brandFamily;
+  static const scriptFallback = brandFallback;
+  static const serifFamily = brandFamily;
+  static const serifFallback = brandFallback;
   static const goldTitleShadows = <Shadow>[
     Shadow(
-      color: Color(0xFF7D4B1D),
-      offset: Offset(1.1, 1.2),
-    ),
-    Shadow(
-      color: Color(0xFF33200F),
-      offset: Offset(2.2, 2.8),
-    ),
-    Shadow(
-      color: Color(0x99FFF2C0),
-      offset: Offset(-0.7, -0.8),
+      color: Color(0xE6F8F2E8),
+      offset: Offset(-1.0, -1.1),
       blurRadius: 1.2,
     ),
     Shadow(
-      color: Color(0x77220F08),
-      offset: Offset(0, 7),
-      blurRadius: 12,
+      color: Color(0xFFD6A06E),
+      offset: Offset(0.9, 0.9),
+    ),
+    Shadow(
+      color: Color(0xFFC88048),
+      offset: Offset(1.8, 2.0),
+    ),
+    Shadow(
+      color: Color(0xFF7E4520),
+      offset: Offset(2.8, 3.2),
+    ),
+    Shadow(
+      color: Color(0xFF2B170B),
+      offset: Offset(3.8, 4.4),
+    ),
+    Shadow(
+      color: Color(0xAA140803),
+      offset: Offset(0, 9),
+      blurRadius: 16,
     ),
   ];
+  static const goldGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFFFFFFFF),
+      OceanColors.cream,
+      Color(0xFFE0B185),
+      OceanColors.copper,
+      Color(0xFFF3D2B1),
+      Color(0xFFD0925E),
+      Color(0xFF7A3E1B),
+    ],
+    stops: [0.0, 0.16, 0.32, 0.48, 0.62, 0.78, 1.0],
+  );
+
+  static Paint goldTitlePaint({double? fontSize}) {
+    final size = fontSize ?? 42;
+    final width = (size * 8.4).clamp(220.0, 980.0).toDouble();
+    final height = (size * 1.55).clamp(42.0, 170.0).toDouble();
+    return Paint()
+      ..shader = goldGradient.createShader(
+        Rect.fromLTWH(0, 0, width, height),
+      );
+  }
 
   static const editorial = TextStyle(
     fontFamily: scriptFamily,
     fontFamilyFallback: scriptFallback,
     color: OceanColors.gold,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w600,
     height: 1.06,
     letterSpacing: 0,
     shadows: goldTitleShadows,
   );
 
   static TextStyle? brand(BuildContext context, {bool compact = false}) {
+    final size = compact ? 28.0 : 34.0;
     return Theme.of(context).textTheme.titleLarge?.copyWith(
           fontFamily: scriptFamily,
           fontFamilyFallback: scriptFallback,
           color: OceanColors.gold,
-          fontSize: compact ? 28 : 34,
-          fontWeight: FontWeight.w400,
+          fontSize: size,
+          fontWeight: FontWeight.w600,
           height: 1,
           letterSpacing: 0,
           shadows: goldTitleShadows,
@@ -92,7 +132,7 @@ class OceanTypography {
           color: color,
           fontSize: fontSize,
           fontStyle: fontStyle,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w600,
           height: 1.04,
           letterSpacing: 0,
           shadows: goldTitleShadows,
@@ -110,7 +150,7 @@ class OceanTypography {
           fontFamilyFallback: scriptFallback,
           color: color,
           fontSize: fontSize,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w600,
           height: height,
           letterSpacing: 0,
           shadows: goldTitleShadows,
@@ -137,7 +177,7 @@ class OceanTypography {
           color: OceanColors.muted,
           fontSize: fontSize,
           fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w500,
           letterSpacing: 0,
         );
   }
@@ -162,6 +202,8 @@ class OceanTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
+      fontFamily: OceanTypography.uiFamily,
+      fontFamilyFallback: OceanTypography.uiFallback,
     );
     final baseTextTheme = base.textTheme.apply(
       bodyColor: OceanColors.ink,
@@ -186,6 +228,8 @@ class OceanTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
+      fontFamily: OceanTypography.uiFamily,
+      fontFamilyFallback: OceanTypography.uiFallback,
       scaffoldBackgroundColor: OceanColors.abyss,
       textTheme: textTheme,
       appBarTheme: const AppBarTheme(
@@ -199,7 +243,7 @@ class OceanTheme {
           fontFamilyFallback: OceanTypography.scriptFallback,
           color: OceanColors.gold,
           fontSize: 30,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
           shadows: OceanTypography.goldTitleShadows,
         ),
@@ -289,7 +333,7 @@ class OceanTheme {
           fontFamilyFallback: OceanTypography.scriptFallback,
           color: OceanColors.gold,
           fontSize: 30,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w600,
           height: 1.08,
           letterSpacing: 0,
           shadows: OceanTypography.goldTitleShadows,
