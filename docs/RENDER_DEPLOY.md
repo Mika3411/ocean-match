@@ -1,35 +1,54 @@
-# Deploy Ocean Match on Render
+# Deployer Ocean Match sur Render
 
-Ocean Match is a Flutter Web single-page app. On Render, deploy it as a Static Site.
+Le fichier `render.yaml` cree maintenant toute la pile MVP :
 
-## What is already configured
+- `ocean-match-mvp` : le site Flutter Web.
+- `ocean-match-api` : l API Node/TypeScript.
+- `ocean-match-db` : la base PostgreSQL.
 
-- `render.yaml` creates a Render Static Site named `ocean-match-mvp`.
-- `scripts/render_build.sh` installs Flutter on Render and runs `flutter build web --release`.
-- Render serves `build/web`.
-- SPA fallback rewrites all routes to `/index.html`.
-- Basic security/cache headers are included.
+## Etapes Render
 
-## Deploy steps
+1. Pousse ce projet sur GitHub, GitLab ou Bitbucket.
+2. Ouvre Render.
+3. Clique sur **New +**.
+4. Choisis **Blueprint**.
+5. Selectionne le repository Ocean Match.
+6. Render lit `render.yaml`.
+7. Clique sur **Apply**.
 
-1. Push this project to GitHub, GitLab, or Bitbucket.
-2. Open Render Dashboard.
-3. Choose **New +** then **Blueprint**.
-4. Select the repository.
-5. Render will read `render.yaml`.
-6. Click **Apply**.
-7. After the deploy finishes, share the generated `.onrender.com` URL with the client.
+Render va ensuite creer le site, l API et la base.
 
-## Manual Static Site settings
+## Variables
 
-If you do not use Blueprint:
+Tu n as normalement rien a remplir a la main pour le MVP.
 
-- Runtime: Static Site
-- Build command: `bash scripts/render_build.sh`
-- Publish directory: `build/web`
-- Rewrite rule: `/*` -> `/index.html`
+Le Blueprint configure automatiquement :
 
-## Important
+- `DATABASE_URL` depuis `ocean-match-db`.
+- `API_PUBLIC_BASE_URL` depuis l URL publique de `ocean-match-api`.
+- `CORS_ORIGINS` depuis l URL publique de `ocean-match-mvp`.
+- `OCEAN_MATCH_API_ORIGIN` cote frontend, transforme en `OCEAN_MATCH_API_URL=.../v1` pendant le build Flutter.
+- `JWT_ACCESS_SECRET` et `JWT_REFRESH_SECRET` avec des secrets generes par Render.
+- `NODE_ENV=production`.
+- `MIN_PROFILE_PHOTOS=0` tant que l app Flutter n a pas encore l upload photo complet.
+- `PHOTO_STORAGE_DRIVER=mock`.
 
-The current local URL `http://127.0.0.1:8765` only works on this computer.
-Render gives you a public URL that your client can open anywhere.
+## Point important sur la base
+
+La base est configuree en `basic-256mb`, pas en `free`.
+
+Pourquoi : une base PostgreSQL gratuite Render expire au bout de 30 jours. Pour de vrais comptes et de vrais messages, il faut une base qui reste en place.
+
+## Plus tard : vraies photos
+
+Le MVP peut fonctionner sans upload photo complet. Quand tu voudras stocker de vraies photos, il faudra passer `PHOTO_STORAGE_DRIVER` a `s3` et ajouter :
+
+```env
+S3_REGION=auto
+S3_ENDPOINT=<endpoint S3 ou Cloudflare R2>
+S3_ACCESS_KEY_ID=<access key>
+S3_SECRET_ACCESS_KEY=<secret key>
+PHOTO_PUBLIC_BASE_URL=<url publique du bucket ou CDN>
+```
+
+Il faudra aussi remettre `MIN_PROFILE_PHOTOS=2` quand l upload photo sera disponible cote Flutter.

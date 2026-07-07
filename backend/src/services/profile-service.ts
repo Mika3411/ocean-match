@@ -47,10 +47,10 @@ async function refreshProfileCompleteness(client: DbClient, userId: string) {
           SELECT count(*)
           FROM profile_photos pp
           WHERE pp.user_id = p.user_id AND pp.deleted_at IS NULL
-        ) >= 2
+        ) >= $2
       WHERE p.user_id = $1
     `,
-    [userId],
+    [userId, env.MIN_PROFILE_PHOTOS],
   );
 }
 

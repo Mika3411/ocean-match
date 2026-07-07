@@ -14,6 +14,7 @@ const envSchema = z.object({
   ACCESS_TOKEN_TTL_MINUTES: z.coerce.number().int().positive().default(15),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
   BCRYPT_ROUNDS: z.coerce.number().int().min(10).max(15).default(12),
+  MIN_PROFILE_PHOTOS: z.coerce.number().int().min(0).max(6).default(2),
   PHOTO_STORAGE_DRIVER: z.enum(['mock', 's3']).default('mock'),
   PHOTO_BUCKET: z.string().min(1),
   PHOTO_PUBLIC_BASE_URL: z.string().url(),

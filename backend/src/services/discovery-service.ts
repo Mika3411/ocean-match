@@ -1,4 +1,5 @@
 import { pool } from '../db/pool.js';
+import { env } from '../config/env.js';
 import {
   serializeCurrentZone,
   serializeFutureRoute,
@@ -134,11 +135,11 @@ export class DiscoveryService {
             WHERE pp.user_id = p.user_id
               AND pp.deleted_at IS NULL
               AND pp.moderation_status = 'approved'
-          ) >= 2
+          ) >= $2
         ORDER BY score DESC, p.updated_at DESC
         LIMIT 50
       `,
-      [userId],
+      [userId, env.MIN_PROFILE_PHOTOS],
     );
 
     return result.rows.map((row) => ({

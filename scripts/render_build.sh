@@ -19,4 +19,12 @@ export PATH="$FLUTTER_HOME/bin:$PATH"
 flutter --version
 flutter config --enable-web
 flutter pub get
-flutter build web --release
+
+dart_defines=()
+if [ -n "${OCEAN_MATCH_API_URL:-}" ]; then
+  dart_defines+=(--dart-define="OCEAN_MATCH_API_URL=${OCEAN_MATCH_API_URL}")
+elif [ -n "${OCEAN_MATCH_API_ORIGIN:-}" ]; then
+  dart_defines+=(--dart-define="OCEAN_MATCH_API_URL=${OCEAN_MATCH_API_ORIGIN%/}/v1")
+fi
+
+flutter build web --release "${dart_defines[@]}"
