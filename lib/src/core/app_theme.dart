@@ -16,6 +16,81 @@ class OceanColors {
   static const cardAlt = Color(0xFF213247);
 }
 
+class OceanTypography {
+  static const serifFamily = 'Georgia';
+  static const serifFallback = ['Times New Roman'];
+
+  static const editorial = TextStyle(
+    fontFamily: serifFamily,
+    fontFamilyFallback: serifFallback,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0,
+  );
+
+  static TextStyle? brand(BuildContext context, {bool compact = false}) {
+    return Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontFamily: serifFamily,
+          fontFamilyFallback: serifFallback,
+          color: OceanColors.sand,
+          fontSize: compact ? 21 : 25,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0,
+        );
+  }
+
+  static TextStyle? display(
+    BuildContext context, {
+    Color color = OceanColors.sand,
+    double? fontSize,
+    FontStyle fontStyle = FontStyle.normal,
+  }) {
+    return Theme.of(context).textTheme.displaySmall?.copyWith(
+          fontFamily: serifFamily,
+          fontFamilyFallback: serifFallback,
+          color: color,
+          fontSize: fontSize,
+          fontStyle: fontStyle,
+          fontWeight: FontWeight.w400,
+          height: 0.94,
+          letterSpacing: 0,
+        );
+  }
+
+  static TextStyle? name(
+    BuildContext context, {
+    double? fontSize,
+    Color color = OceanColors.sand,
+  }) {
+    return display(context, color: color, fontSize: fontSize)?.copyWith(
+      fontStyle: FontStyle.italic,
+    );
+  }
+
+  static TextStyle? age(
+    BuildContext context, {
+    double? fontSize,
+  }) {
+    return Theme.of(context).textTheme.titleLarge?.copyWith(
+          fontFamily: serifFamily,
+          fontFamilyFallback: serifFallback,
+          color: OceanColors.muted,
+          fontSize: fontSize,
+          fontStyle: FontStyle.italic,
+          fontWeight: FontWeight.w400,
+          letterSpacing: 0,
+        );
+  }
+
+  static TextStyle? sectionLabel(BuildContext context) {
+    return Theme.of(context).textTheme.labelLarge?.copyWith(
+          color: OceanColors.gold,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0,
+        );
+  }
+}
+
 class OceanTheme {
   static ThemeData light() {
     final colorScheme = ColorScheme.fromSeed(
@@ -32,9 +107,23 @@ class OceanTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
     );
-    final textTheme = base.textTheme.apply(
+    final baseTextTheme = base.textTheme.apply(
       bodyColor: OceanColors.ink,
       displayColor: OceanColors.sand,
+    );
+    final textTheme = baseTextTheme.copyWith(
+      displayLarge:
+          baseTextTheme.displayLarge?.merge(OceanTypography.editorial),
+      displayMedium:
+          baseTextTheme.displayMedium?.merge(OceanTypography.editorial),
+      displaySmall:
+          baseTextTheme.displaySmall?.merge(OceanTypography.editorial),
+      headlineSmall:
+          baseTextTheme.headlineSmall?.merge(OceanTypography.editorial),
+      titleLarge: baseTextTheme.titleLarge?.copyWith(letterSpacing: 0),
+      titleMedium: baseTextTheme.titleMedium?.copyWith(letterSpacing: 0),
+      labelLarge: baseTextTheme.labelLarge?.copyWith(letterSpacing: 0),
+      labelMedium: baseTextTheme.labelMedium?.copyWith(letterSpacing: 0),
     );
 
     return ThemeData(

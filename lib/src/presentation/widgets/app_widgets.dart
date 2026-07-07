@@ -32,11 +32,7 @@ class AppLogo extends StatelessWidget {
         const SizedBox(width: 12),
         Text(
           'Ocean Match',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontFamily: 'Georgia',
-                fontWeight: FontWeight.w600,
-                color: OceanColors.sand,
-              ),
+          style: OceanTypography.brand(context, compact: compact),
         ),
       ],
     );
@@ -78,13 +74,7 @@ class SectionCard extends StatelessWidget {
                         children: [
                           Text(
                             title!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  color: OceanColors.gold,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            style: OceanTypography.sectionLabel(context),
                           ),
                           if (subtitle != null) ...[
                             const SizedBox(height: 4),
@@ -134,7 +124,8 @@ class InfoRow extends StatelessWidget {
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: OceanColors.muted,
-                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.w500,
                   ),
             ),
           ),
@@ -143,7 +134,7 @@ class InfoRow extends StatelessWidget {
               value,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: OceanColors.ink,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                   ),
             ),
           ),
@@ -185,7 +176,7 @@ class OceanBadge extends StatelessWidget {
             label,
             style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   color: color,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w700,
                 ),
           ),
         ],

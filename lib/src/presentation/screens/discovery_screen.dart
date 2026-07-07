@@ -174,24 +174,18 @@ class _DiscoveryHeader extends StatelessWidget {
                     children: [
                       Text(
                         'Decouvrir',
-                        style:
-                            Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  fontFamily: 'Georgia',
-                                  color: OceanColors.sand,
-                                  fontWeight: FontWeight.w500,
-                                  height: 0.95,
-                                ),
+                        style: OceanTypography.display(
+                          context,
+                          color: OceanColors.sand,
+                        ),
                       ),
                       Text(
                         'des profils',
-                        style:
-                            Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  fontFamily: 'Georgia',
-                                  color: OceanColors.gold,
-                                  fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.w400,
-                                  height: 0.95,
-                                ),
+                        style: OceanTypography.display(
+                          context,
+                          color: OceanColors.gold,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ],
                   ),
@@ -214,7 +208,8 @@ class _DiscoveryHeader extends StatelessWidget {
                 '$remainingCount profils compatibles',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       color: OceanColors.muted,
-                      fontWeight: FontWeight.w800,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
             ],
@@ -559,14 +554,10 @@ class _ProfileCardBody extends StatelessWidget {
                         profile.firstName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style:
-                            Theme.of(context).textTheme.displaySmall?.copyWith(
-                                  fontFamily: 'Georgia',
-                                  color: OceanColors.sand,
-                                  fontSize: isTight ? 31.0 : 36.0,
-                                  height: 0.95,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                        style: OceanTypography.name(
+                          context,
+                          fontSize: isTight ? 31.0 : 38.0,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -574,12 +565,10 @@ class _ProfileCardBody extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         '${profile.age}',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontFamily: 'Georgia',
-                              color: OceanColors.muted,
-                              fontSize: isTight ? 19.0 : null,
-                              fontWeight: FontWeight.w400,
-                            ),
+                        style: OceanTypography.age(
+                          context,
+                          fontSize: isTight ? 19.0 : null,
+                        ),
                       ),
                     ),
                   ],
@@ -746,7 +735,8 @@ class _CompatibilityNotice extends StatelessWidget {
                 'Profil $score%. Zones larges uniquement, jamais de position exacte.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: OceanColors.muted,
-                      fontWeight: FontWeight.w700,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w500,
                     ),
               ),
             ),
@@ -815,11 +805,7 @@ class _ProfileDetailsSheet extends StatelessWidget {
                       profile.firstName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                            fontFamily: 'Georgia',
-                            color: OceanColors.sand,
-                            fontWeight: FontWeight.w400,
-                          ),
+                      style: OceanTypography.name(context),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -827,11 +813,7 @@ class _ProfileDetailsSheet extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 6),
                     child: Text(
                       '${profile.age} ans',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontFamily: 'Georgia',
-                            color: OceanColors.muted,
-                            fontWeight: FontWeight.w400,
-                          ),
+                      style: OceanTypography.age(context),
                     ),
                   ),
                 ],
@@ -871,7 +853,7 @@ class _ProfileDetailsSheet extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         height: 1.55,
                         color: OceanColors.ink,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                 ),
               ),
@@ -1105,10 +1087,7 @@ class _ScoreBar extends StatelessWidget {
         const SizedBox(width: 12),
         Text(
           'Profil $score%',
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: OceanColors.gold,
-                fontWeight: FontWeight.w900,
-              ),
+          style: OceanTypography.sectionLabel(context),
         ),
       ],
     );
@@ -1133,10 +1112,7 @@ class _DetailSection extends StatelessWidget {
         children: [
           Text(
             title.toUpperCase(),
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: OceanColors.gold,
-                  fontWeight: FontWeight.w900,
-                ),
+            style: OceanTypography.sectionLabel(context),
           ),
           const SizedBox(height: 12),
           const Divider(height: 1, color: OceanColors.line),
