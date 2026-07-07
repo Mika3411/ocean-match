@@ -369,6 +369,11 @@ class _LandingNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authActionLabel = isLogin
+        ? (isWide ? 'Creer un compte' : 'Compte')
+        : (isWide ? 'Se connecter' : 'Connexion');
+    final authActionTooltip = isLogin ? 'Creer un compte' : 'Se connecter';
+
     return DecoratedBox(
       decoration: BoxDecoration(
         color: OceanColors.obsidian.withValues(alpha: 0.30),
@@ -379,7 +384,19 @@ class _LandingNav extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(isWide ? 16 : 10, 10, 10, 10),
         child: Row(
           children: [
-            const AppLogo(compact: true),
+            if (isWide)
+              const AppLogo(compact: true)
+            else
+              const Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: AppLogo(compact: true),
+                  ),
+                ),
+              ),
             if (isWide) ...[
               const Spacer(),
               _NavTextButton(
@@ -394,23 +411,29 @@ class _LandingNav extends StatelessWidget {
               _NavTextButton(label: 'Pour qui', onPressed: onScrollToAudience),
               const SizedBox(width: 18),
             ] else
-              const Spacer(),
-            OutlinedButton.icon(
-              onPressed: isBusy
-                  ? null
-                  : () =>
-                      onSetMode(isLogin ? _AuthMode.signUp : _AuthMode.login),
-              icon: Icon(
-                isLogin ? Icons.person_add_alt_1 : Icons.login,
-                size: 18,
-              ),
-              label: Text(isLogin ? 'Creer un compte' : 'Se connecter'),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(0, 42),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                backgroundColor: OceanColors.obsidian.withValues(alpha: 0.48),
-                side: BorderSide(
-                  color: OceanColors.champagne.withValues(alpha: 0.42),
+              const SizedBox(width: 10),
+            Tooltip(
+              message: authActionTooltip,
+              child: OutlinedButton.icon(
+                onPressed: isBusy
+                    ? null
+                    : () => onSetMode(
+                          isLogin ? _AuthMode.signUp : _AuthMode.login,
+                        ),
+                icon: Icon(
+                  isLogin ? Icons.person_add_alt_1 : Icons.login,
+                  size: isWide ? 18 : 17,
+                ),
+                label: Text(authActionLabel),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: Size(0, isWide ? 42 : 38),
+                  padding: EdgeInsets.symmetric(horizontal: isWide ? 16 : 12),
+                  visualDensity:
+                      isWide ? VisualDensity.standard : VisualDensity.compact,
+                  backgroundColor: OceanColors.obsidian.withValues(alpha: 0.48),
+                  side: BorderSide(
+                    color: OceanColors.champagne.withValues(alpha: 0.42),
+                  ),
                 ),
               ),
             ),
@@ -461,8 +484,7 @@ class _HeroCopy extends StatelessWidget {
             style: OceanTypography.display(
               context,
               fontSize: isCompact ? 50 : 90,
-              color: OceanColors.sand,
-            )?.copyWith(height: 0.94),
+            ),
           ),
           SizedBox(height: isCompact ? 20 : 28),
           Text(
@@ -636,10 +658,7 @@ class _AuthPanel extends StatelessWidget {
             Text(
               isLogin ? 'Bon retour a bord' : 'Bienvenue a bord',
               textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: OceanColors.sand,
-                    fontWeight: FontWeight.w800,
-                  ),
+              style: OceanTypography.title(context, fontSize: 30),
             ),
             SizedBox(height: isCompact ? 14 : 18),
             SegmentedButton<_AuthMode>(
@@ -806,7 +825,6 @@ class _WideZoneBand extends StatelessWidget {
                       style: OceanTypography.display(
                         context,
                         fontSize: 32,
-                        color: OceanColors.sand,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -1138,7 +1156,6 @@ class _SectionIntro extends StatelessWidget {
           style: OceanTypography.display(
             context,
             fontSize: 42,
-            color: OceanColors.sand,
           ),
         ),
         const SizedBox(height: 12),
@@ -1206,10 +1223,7 @@ class _FeatureTile extends StatelessWidget {
               const SizedBox(height: 18),
               Text(
                 title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: OceanColors.sand,
-                      fontWeight: FontWeight.w800,
-                    ),
+                style: OceanTypography.title(context, fontSize: 28),
               ),
               const SizedBox(height: 8),
               Text(
@@ -1269,10 +1283,7 @@ class _StepTile extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: OceanColors.sand,
-                    fontWeight: FontWeight.w800,
-                  ),
+              style: OceanTypography.title(context, fontSize: 31),
             ),
             const SizedBox(height: 8),
             Text(

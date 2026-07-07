@@ -42,10 +42,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             const SizedBox(height: 28),
             Text(
               'Verifiez votre email',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: OceanColors.ink,
-                  ),
+              style: OceanTypography.title(context, fontSize: 34),
             ),
             const SizedBox(height: 8),
             Text(

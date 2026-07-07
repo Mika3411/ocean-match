@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app.dart';
+import '../../core/app_theme.dart';
 import '../../domain/models.dart';
 import 'app_widgets.dart';
 
@@ -102,9 +103,7 @@ class _ReportSheetState extends State<_ReportSheet> {
         children: [
           Text(
             'Signaler ${widget.targetName}',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
+            style: OceanTypography.title(context, fontSize: 30),
           ),
           const SizedBox(height: 8),
           const Text(

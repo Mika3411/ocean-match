@@ -34,18 +34,20 @@ class DiscoveryScreen extends StatelessWidget {
     }
     final profiles = controller.discoveryProfiles;
     return Scaffold(
-      body: SafeArea(
-        child: profiles.isEmpty
-            ? _EmptyDiscovery(
-                onRefresh: controller.refreshDiscovery,
-                onOpenMessages: onOpenMessages,
-              )
-            : _DiscoveryCard(
-                discoveryProfile: profiles.first,
-                remainingCount: profiles.length,
-                onOpenMessages: onOpenMessages,
-                onRefresh: controller.refreshDiscovery,
-              ),
+      body: OceanBackground(
+        child: SafeArea(
+          child: profiles.isEmpty
+              ? _EmptyDiscovery(
+                  onRefresh: controller.refreshDiscovery,
+                  onOpenMessages: onOpenMessages,
+                )
+              : _DiscoveryCard(
+                  discoveryProfile: profiles.first,
+                  remainingCount: profiles.length,
+                  onOpenMessages: onOpenMessages,
+                  onRefresh: controller.refreshDiscovery,
+                ),
+        ),
       ),
     );
   }
@@ -67,23 +69,25 @@ class _LockedDiscovery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-          children: [
-            _DiscoveryHeader(
-              onRefresh: onRefresh,
-              onOpenMessages: onOpenMessages,
-            ),
-            const SizedBox(height: 18),
-            SectionCard(
-              title: title,
-              subtitle: message,
-              child: const Text(
-                'Revenez ici apres validation du compte.',
+      body: OceanBackground(
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+            children: [
+              _DiscoveryHeader(
+                onRefresh: onRefresh,
+                onOpenMessages: onOpenMessages,
               ),
-            ),
-          ],
+              const SizedBox(height: 18),
+              SectionCard(
+                title: title,
+                subtitle: message,
+                child: const Text(
+                  'Revenez ici apres validation du compte.',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -163,8 +167,13 @@ class _DiscoveryHeader extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 18),
-            const Divider(height: 1, color: OceanColors.line),
-            const SizedBox(height: 24),
+            Divider(
+              height: 1,
+              color: OceanColors.champagne.withValues(alpha: 0.18),
+            ),
+            const SizedBox(height: 14),
+            const _LovelySignal(),
+            const SizedBox(height: 18),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -174,16 +183,12 @@ class _DiscoveryHeader extends StatelessWidget {
                     children: [
                       Text(
                         'Decouvrir',
-                        style: OceanTypography.display(
-                          context,
-                          color: OceanColors.sand,
-                        ),
+                        style: OceanTypography.display(context),
                       ),
                       Text(
                         'des profils',
                         style: OceanTypography.display(
                           context,
-                          color: OceanColors.gold,
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -192,12 +197,16 @@ class _DiscoveryHeader extends StatelessWidget {
                 ),
                 OutlinedButton.icon(
                   onPressed: onRefresh,
-                  icon: const Icon(Icons.tune, size: 18),
+                  icon: const Icon(Icons.auto_awesome, size: 18),
                   label: const Text('Filtres'),
                   style: OutlinedButton.styleFrom(
                     minimumSize: const Size(104, 44),
                     padding: const EdgeInsets.symmetric(horizontal: 14),
-                    backgroundColor: OceanColors.card,
+                    backgroundColor:
+                        OceanColors.obsidian.withValues(alpha: 0.50),
+                    side: BorderSide(
+                      color: OceanColors.champagne.withValues(alpha: 0.30),
+                    ),
                   ),
                 ),
               ],
@@ -207,7 +216,7 @@ class _DiscoveryHeader extends StatelessWidget {
               Text(
                 '$remainingCount profils compatibles',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: OceanColors.muted,
+                      color: OceanColors.champagne,
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.w600,
                     ),
@@ -235,15 +244,65 @@ class _HeaderIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: OceanColors.card,
+        gradient: LinearGradient(
+          colors: [
+            OceanColors.glassStrong,
+            OceanColors.obsidian.withValues(alpha: 0.72),
+          ],
+        ),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: OceanColors.line),
+        border:
+            Border.all(color: OceanColors.champagne.withValues(alpha: 0.22)),
       ),
       child: IconButton(
         tooltip: tooltip,
         onPressed: onPressed,
-        icon: Icon(icon, color: OceanColors.muted),
+        icon: Icon(icon, color: OceanColors.champagne),
       ),
+    );
+  }
+}
+
+class _LovelySignal extends StatelessWidget {
+  const _LovelySignal();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: OceanColors.champagne.withValues(alpha: 0.30),
+                ),
+              ),
+            ),
+            child: const SizedBox(height: 1),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Icon(
+            Icons.favorite_rounded,
+            color: OceanColors.coral,
+            size: 16,
+          ),
+        ),
+        Expanded(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: OceanColors.champagne.withValues(alpha: 0.30),
+                ),
+              ),
+            ),
+            child: const SizedBox(height: 1),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -290,14 +349,28 @@ class _DiscoveryCardState extends State<_DiscoveryCard> {
               aspectRatio: 0.60,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: OceanColors.card,
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      OceanColors.glassStrong,
+                      OceanColors.obsidian.withValues(alpha: 0.96),
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: OceanColors.line),
+                  border: Border.all(
+                    color: OceanColors.champagne.withValues(alpha: 0.34),
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.35),
-                      blurRadius: 30,
-                      offset: const Offset(0, 16),
+                      color: OceanColors.coral.withValues(alpha: 0.16),
+                      blurRadius: 54,
+                      offset: const Offset(0, 20),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.34),
+                      blurRadius: 36,
+                      offset: const Offset(0, 18),
                     ),
                   ],
                 ),
@@ -358,6 +431,10 @@ class _DiscoveryCardState extends State<_DiscoveryCard> {
                       child: OutlinedButton.icon(
                         onPressed: _isBusy ? null : () => _pass(context),
                         icon: const Icon(Icons.close),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor:
+                              OceanColors.obsidian.withValues(alpha: 0.42),
+                        ),
                         label: Text(
                           _pendingAction == 'pass' ? '...' : 'Passer',
                         ),
@@ -367,7 +444,12 @@ class _DiscoveryCardState extends State<_DiscoveryCard> {
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: _isBusy ? null : () => _like(context),
-                        icon: const Icon(Icons.favorite),
+                        icon: const Icon(Icons.favorite_rounded),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: OceanColors.coral,
+                          foregroundColor: OceanColors.obsidian,
+                          minimumSize: const Size.fromHeight(52),
+                        ),
                         label: Text(
                           _pendingAction == 'like' ? '...' : 'Liker',
                         ),
@@ -385,6 +467,8 @@ class _DiscoveryCardState extends State<_DiscoveryCard> {
                         label: const Text('Signaler'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: OceanColors.coral,
+                          backgroundColor:
+                              OceanColors.obsidian.withValues(alpha: 0.34),
                           side: BorderSide(
                             color: OceanColors.coral.withValues(alpha: 0.34),
                           ),
@@ -399,7 +483,12 @@ class _DiscoveryCardState extends State<_DiscoveryCard> {
                         label: const Text('Bloquer'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: OceanColors.muted,
-                          side: const BorderSide(color: OceanColors.line),
+                          backgroundColor:
+                              OceanColors.obsidian.withValues(alpha: 0.34),
+                          side: BorderSide(
+                            color:
+                                OceanColors.champagne.withValues(alpha: 0.18),
+                          ),
                         ),
                       ),
                     ),
@@ -536,8 +625,17 @@ class _ProfileCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profile = discoveryProfile.profile;
-    return ColoredBox(
-      color: OceanColors.card,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            OceanColors.glassStrong,
+            OceanColors.obsidian.withValues(alpha: 0.96),
+          ],
+        ),
+      ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isTight = constraints.maxHeight < 290;
@@ -591,8 +689,8 @@ class _ProfileCardBody extends StatelessWidget {
                     ),
                     OceanBadge(
                       label: _primaryIntention(discoveryProfile.intentions),
-                      icon: Icons.favorite_border,
-                      color: OceanColors.muted,
+                      icon: Icons.favorite_rounded,
+                      color: OceanColors.blush,
                     ),
                   ],
                 ),
@@ -600,13 +698,15 @@ class _ProfileCardBody extends StatelessWidget {
                 if (!isTight)
                   _CompatibilityNotice(score: discoveryProfile.score),
                 if (!isTight) const SizedBox(height: 14),
-                OutlinedButton(
+                OutlinedButton.icon(
                   onPressed: onOpenDetails,
+                  icon: const Icon(Icons.info_outline, size: 18),
                   style: OutlinedButton.styleFrom(
-                    backgroundColor: OceanColors.cardAlt,
+                    backgroundColor:
+                        OceanColors.cardAlt.withValues(alpha: 0.74),
                     minimumSize: Size.fromHeight(isTight ? 46 : 52),
                   ),
-                  child: const Text('Voir le profil complet ->'),
+                  label: const Text('Voir le profil complet'),
                 ),
               ],
             ),
@@ -632,7 +732,7 @@ class _PhotoShade extends StatelessWidget {
               end: Alignment.bottomCenter,
               colors: [
                 Colors.transparent,
-                OceanColors.card.withValues(alpha: 0.92),
+                OceanColors.obsidian.withValues(alpha: 0.94),
               ],
             ),
           ),
@@ -653,15 +753,16 @@ class _ProfilePhotoFallback extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFF2B3E55),
+            Color(0xFF304860),
             OceanColors.deepBlue,
+            OceanColors.obsidian,
           ],
         ),
       ),
       child: Center(
         child: Icon(
-          Icons.directions_boat_filled,
-          color: OceanColors.gold,
+          Icons.anchor_rounded,
+          color: OceanColors.champagne,
           size: 96,
         ),
       ),
@@ -716,9 +817,15 @@ class _CompatibilityNotice extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: OceanColors.mist.withValues(alpha: 0.62),
+        gradient: LinearGradient(
+          colors: [
+            OceanColors.mist.withValues(alpha: 0.70),
+            OceanColors.obsidian.withValues(alpha: 0.44),
+          ],
+        ),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: OceanColors.gold.withValues(alpha: 0.24)),
+        border:
+            Border.all(color: OceanColors.champagne.withValues(alpha: 0.24)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -727,7 +834,7 @@ class _CompatibilityNotice extends StatelessWidget {
             const Icon(
               Icons.shield_outlined,
               size: 18,
-              color: OceanColors.muted,
+              color: OceanColors.champagne,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -836,8 +943,8 @@ class _ProfileDetailsSheet extends StatelessWidget {
                   ),
                   OceanBadge(
                     label: _primaryIntention(discoveryProfile.intentions),
-                    icon: Icons.favorite_border,
-                    color: OceanColors.muted,
+                    icon: Icons.favorite_rounded,
+                    color: OceanColors.blush,
                   ),
                 ],
               ),
@@ -890,8 +997,8 @@ class _ProfileDetailsSheet extends StatelessWidget {
                     for (final intention in discoveryProfile.intentions)
                       OceanBadge(
                         label: intention.label,
-                        icon: Icons.favorite_border,
-                        color: OceanColors.gold,
+                        icon: Icons.favorite_rounded,
+                        color: OceanColors.blush,
                       ),
                   ],
                 ),
@@ -999,7 +1106,7 @@ class _ProfileDetailsSheet extends StatelessWidget {
                           }
                         }
                       },
-                      icon: const Icon(Icons.favorite),
+                      icon: const Icon(Icons.favorite_rounded),
                       label: const Text('Liker'),
                     ),
                   ),
@@ -1111,7 +1218,7 @@ class _DetailSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title.toUpperCase(),
+            title,
             style: OceanTypography.sectionLabel(context),
           ),
           const SizedBox(height: 12),
