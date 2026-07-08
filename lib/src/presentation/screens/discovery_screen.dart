@@ -160,7 +160,6 @@ class _DiscoveryHeader extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
                 _HeaderIconButton(
                   tooltip: 'Actualiser',
                   icon: Icons.refresh,
@@ -179,27 +178,43 @@ class _DiscoveryHeader extends StatelessWidget {
               height: 1,
               color: OceanColors.champagne.withValues(alpha: 0.18),
             ),
-            const SizedBox(height: 14),
-            const _LovelySignal(),
-            const SizedBox(height: 18),
+            const SizedBox(height: 22),
             Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GoldText(
-                        'Decouvrir',
-                        style: OceanTypography.display(context),
-                      ),
-                      GoldText(
-                        'des profils',
-                        style: OceanTypography.display(
-                          context,
-                          fontStyle: FontStyle.italic,
+                      Text(
+                        'Découvrir des profils',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: OceanColors.cream,
+                          fontFamily: OceanTypography.uiFamily,
+                          fontFamilyFallback: OceanTypography.uiFallback,
+                          fontSize: 27,
+                          fontWeight: FontWeight.w800,
+                          height: 1.05,
+                          letterSpacing: 0,
+                          shadows: const [],
                         ),
                       ),
+                      if (remainingCount != null) ...[
+                        const SizedBox(height: 7),
+                        Text(
+                          '$remainingCount profils compatibles',
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    color: OceanColors.cream.withValues(
+                                      alpha: 0.78,
+                                    ),
+                                    fontStyle: FontStyle.normal,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0,
+                                  ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -219,17 +234,6 @@ class _DiscoveryHeader extends StatelessWidget {
                 ),
               ],
             ),
-            if (remainingCount != null) ...[
-              const SizedBox(height: 10),
-              Text(
-                '$remainingCount profils compatibles',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: OceanColors.champagne,
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-            ],
           ],
         ),
       ),
@@ -252,65 +256,16 @@ class _HeaderIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            OceanColors.glassStrong,
-            OceanColors.obsidian.withValues(alpha: 0.72),
-          ],
-        ),
+        color: OceanColors.obsidian.withValues(alpha: 0.32),
         borderRadius: BorderRadius.circular(8),
         border:
-            Border.all(color: OceanColors.champagne.withValues(alpha: 0.22)),
+            Border.all(color: OceanColors.champagne.withValues(alpha: 0.26)),
       ),
       child: IconButton(
         tooltip: tooltip,
         onPressed: onPressed,
         icon: Icon(icon, color: OceanColors.champagne),
       ),
-    );
-  }
-}
-
-class _LovelySignal extends StatelessWidget {
-  const _LovelySignal();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: OceanColors.champagne.withValues(alpha: 0.30),
-                ),
-              ),
-            ),
-            child: const SizedBox(height: 1),
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Icon(
-            Icons.favorite_rounded,
-            color: OceanColors.coral,
-            size: 16,
-          ),
-        ),
-        Expanded(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                  color: OceanColors.champagne.withValues(alpha: 0.30),
-                ),
-              ),
-            ),
-            child: const SizedBox(height: 1),
-          ),
-        ),
-      ],
     );
   }
 }

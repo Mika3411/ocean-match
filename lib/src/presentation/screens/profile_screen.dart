@@ -31,6 +31,9 @@ class ProfileScreen extends StatelessWidget {
     final route = controller.currentFutureRoute;
     final preferences = controller.currentPreferences;
     final photos = controller.currentPhotos;
+    final currentPort = _portName(controller.ports, zone?.portId);
+    final destinationPort =
+        _portName(controller.ports, route?.destinationPortId);
 
     if (profile == null || life == null || zone == null || route == null) {
       return const Scaffold(
@@ -112,6 +115,8 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   InfoRow(label: 'Zone', value: zone.zone),
+                  if (currentPort != null)
+                    InfoRow(label: 'Port', value: currentPort),
                   const SizedBox(height: 8),
                   const Text(
                     'Votre position exacte n est jamais affichee.',
@@ -129,6 +134,8 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   InfoRow(label: 'Destination', value: route.destinationZone),
+                  if (destinationPort != null)
+                    InfoRow(label: 'Port vise', value: destinationPort),
                   InfoRow(
                     label: 'Periode',
                     value: '${route.startPeriod} - ${route.endPeriod}',
@@ -272,4 +279,12 @@ class ProfileScreen extends StatelessWidget {
     endController.dispose();
     commentController.dispose();
   }
+}
+
+String? _portName(List<HarborPort> ports, String? id) {
+  if (id == null) return null;
+  for (final port in ports) {
+    if (port.id == id) return port.displayName;
+  }
+  return null;
 }

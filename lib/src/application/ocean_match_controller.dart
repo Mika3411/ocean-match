@@ -13,6 +13,7 @@ class OceanMatchController extends ChangeNotifier {
   UserAccount? _currentUser;
   List<DiscoveryProfile> _discoveryProfiles = const [];
   List<ConversationSummary> _conversationSummaries = const [];
+  List<PortActivity> _portActivities = const [];
   final Map<String, List<Message>> _messagesByConversation = {};
 
   UserAccount? get currentUser => _currentUser;
@@ -82,6 +83,10 @@ class OceanMatchController extends ChangeNotifier {
 
   List<ConversationSummary> get conversationSummaries => _conversationSummaries;
 
+  List<HarborPort> get ports => _repository.getPorts();
+
+  List<PortActivity> get portActivities => _portActivities;
+
   Future<void> signUp({
     required String email,
     required String password,
@@ -150,6 +155,7 @@ class OceanMatchController extends ChangeNotifier {
       CurrentZone(userId: userId, zone: zone, updatedAt: DateTime.now()),
     );
     await refreshDiscovery();
+    await refreshPorts();
     notifyListeners();
   }
 
@@ -176,6 +182,25 @@ class OceanMatchController extends ChangeNotifier {
     );
     await _repository.updateFutureRoute(userId, route);
     await refreshDiscovery();
+    await refreshPorts();
+    notifyListeners();
+  }
+
+  Future<void> updateCurrentPort(HarborPort port) async {
+    _requireCompleteProfile();
+    final userId = _requireCurrentUserId();
+    await _repository.updateCurrentPort(userId, port);
+    await refreshDiscovery();
+    await refreshPorts();
+    notifyListeners();
+  }
+
+  Future<void> updateDestinationPort(HarborPort port) async {
+    _requireCompleteProfile();
+    final userId = _requireCurrentUserId();
+    await _repository.updateDestinationPort(userId, port);
+    await refreshDiscovery();
+    await refreshPorts();
     notifyListeners();
   }
 
@@ -187,6 +212,7 @@ class OceanMatchController extends ChangeNotifier {
     }
     await refreshDiscovery();
     await refreshConversations();
+    await refreshPorts();
   }
 
   Future<void> refreshDiscovery() async {
@@ -197,6 +223,17 @@ class OceanMatchController extends ChangeNotifier {
       return;
     }
     _discoveryProfiles = await _repository.getDiscoveryProfiles(userId);
+    notifyListeners();
+  }
+
+  Future<void> refreshPorts() async {
+    final userId = _currentUser?.id;
+    if (userId == null || !canAccessDiscovery) {
+      _portActivities = const [];
+      notifyListeners();
+      return;
+    }
+    _portActivities = await _repository.getPortActivities(userId);
     notifyListeners();
   }
 
@@ -348,6 +385,7 @@ class OceanMatchController extends ChangeNotifier {
 
   void _clearPrivateData() {
     _clearDiscovery();
+    _portActivities = const [];
     _conversationSummaries = const [];
     _messagesByConversation.clear();
   }

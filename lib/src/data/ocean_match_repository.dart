@@ -1,6 +1,7 @@
 import '../core/app_error.dart';
 import '../core/id_generator.dart';
 import '../domain/models.dart';
+import 'ports_catalog.dart';
 
 abstract class OceanMatchRepository {
   Future<UserAccount> signUp({
@@ -31,6 +32,14 @@ abstract class OceanMatchRepository {
   Future<void> updateCurrentZone(String userId, CurrentZone zone);
 
   Future<void> updateFutureRoute(String userId, FutureRoute route);
+
+  List<HarborPort> getPorts();
+
+  Future<List<PortActivity>> getPortActivities(String userId);
+
+  Future<void> updateCurrentPort(String userId, HarborPort port);
+
+  Future<void> updateDestinationPort(String userId, HarborPort port);
 
   Future<List<DiscoveryProfile>> getDiscoveryProfiles(String userId);
 
@@ -258,6 +267,63 @@ class MockOceanMatchRepository implements OceanMatchRepository {
     _requireText(route.endPeriod, 'Periode de fin obligatoire.');
     _rejectExactPosition(route.comment);
     _futureRoutes[userId] = route.copyWith(isActive: true);
+  }
+
+  @override
+  List<HarborPort> getPorts() => List.unmodifiable(harborPorts);
+
+  @override
+  Future<List<PortActivity>> getPortActivities(String userId) async {
+    _requireActiveUser(userId);
+    final current = _currentZones[userId];
+    final route = _futureRoutes[userId];
+    final activities = <PortActivity>[
+      for (final port in harborPorts)
+        PortActivity(
+          port: port,
+          currentCount: _currentCountForPort(port.id),
+          destinationCount: _destinationCountForPort(port.id),
+          isCurrentUserHere: current?.portId == port.id,
+          isCurrentUserGoing: route?.destinationPortId == port.id,
+        ),
+    ];
+    activities.sort((a, b) {
+      final byTotal = b.totalCount.compareTo(a.totalCount);
+      if (byTotal != 0) return byTotal;
+      return a.port.name.compareTo(b.port.name);
+    });
+    return activities;
+  }
+
+  @override
+  Future<void> updateCurrentPort(String userId, HarborPort port) async {
+    _requireActiveUser(userId);
+    _currentZones[userId] = CurrentZone(
+      userId: userId,
+      zone: port.region,
+      country: port.country,
+      portId: port.id,
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<void> updateDestinationPort(String userId, HarborPort port) async {
+    _requireActiveUser(userId);
+    final existing = _futureRoutes[userId];
+    _futureRoutes[userId] = FutureRoute(
+      id: existing?.id ?? _ids.next('route'),
+      userId: userId,
+      destinationZone: port.region,
+      destinationCountry: port.country,
+      destinationPortId: port.id,
+      startPeriod: existing?.startPeriod ?? 'A preciser',
+      endPeriod: existing?.endPeriod ?? 'A preciser',
+      flexibility: existing?.flexibility ?? RouteFlexibility.flexible,
+      comment: existing?.comment ?? '',
+      isActive: true,
+      updatedAt: DateTime.now(),
+    );
   }
 
   @override
@@ -605,6 +671,30 @@ class MockOceanMatchRepository implements OceanMatchRepository {
 
   @override
   Preferences? getPreferences(String userId) => _preferences[userId];
+
+  int _currentCountForPort(String portId) {
+    return _currentZones.entries.where((entry) {
+      return entry.value.portId == portId &&
+          _hasPublicCompleteProfile(entry.key);
+    }).length;
+  }
+
+  int _destinationCountForPort(String portId) {
+    return _futureRoutes.entries.where((entry) {
+      return entry.value.destinationPortId == portId &&
+          entry.value.isActive &&
+          _hasPublicCompleteProfile(entry.key);
+    }).length;
+  }
+
+  bool _hasPublicCompleteProfile(String userId) {
+    final account = _accounts[userId];
+    final profile = _profiles[userId];
+    if (account == null || profile == null) return false;
+    return account.status == AccountStatus.active &&
+        account.emailVerified &&
+        profile.isComplete;
+  }
 
   void _validateOnboardingPayload({
     required Profile profile,
@@ -996,6 +1086,8 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       lifestyle: ['minimaliste', 'escales calmes', 'navigation lente'],
       zone: 'Canaries',
       route: 'Caraibes',
+      currentPortId: 'las-palmas',
+      destinationPortId: 'le-marin',
       intentions: [Intention.seriousRelationship, Intention.sailingProject],
       photos: const [
         'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80',
@@ -1018,6 +1110,8 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       lifestyle: ['aventure', 'longue traversee', 'vie sociale'],
       zone: 'Atlantique Europe',
       route: 'Canaries',
+      currentPortId: 'lisbonne',
+      destinationPortId: 'las-palmas',
       intentions: [Intention.casualDating, Intention.friendship],
       photos: const [
         'https://images.unsplash.com/photo-1469796466635-455ede028aca?auto=format&fit=crop&w=900&q=80',
@@ -1039,6 +1133,8 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       lifestyle: ['equipage partage', 'aventure', 'escales calmes'],
       zone: 'Cap-Vert',
       route: 'Caraibes',
+      currentPortId: 'mindelo',
+      destinationPortId: 'pointe-a-pitre',
       intentions: [
         Intention.crew,
         Intention.sailingProject,
@@ -1064,6 +1160,8 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       lifestyle: ['confort', 'projet familial', 'navigation lente'],
       zone: 'Mediterranee',
       route: 'Canaries',
+      currentPortId: 'palma',
+      destinationPortId: 'santa-cruz-tenerife',
       intentions: [Intention.liveaboardProject, Intention.seriousRelationship],
       photos: const [
         'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80',
@@ -1098,6 +1196,8 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       lifestyle: ['navigation lente', 'escales calmes', 'vie a bord'],
       zone: 'Canaries',
       route: 'Caraibes',
+      currentPortId: 'las-palmas',
+      destinationPortId: 'le-marin',
       intentions: [Intention.seriousRelationship, Intention.sailingProject],
       photos: const [
         'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80',
@@ -1121,6 +1221,8 @@ class MockOceanMatchRepository implements OceanMatchRepository {
     required List<String> lifestyle,
     required String zone,
     required String route,
+    String? currentPortId,
+    String? destinationPortId,
     required List<Intention> intentions,
     required List<String> photos,
   }) {
@@ -1166,11 +1268,23 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       lifestyleTags: lifestyle,
       updatedAt: now,
     );
-    _currentZones[id] = CurrentZone(userId: id, zone: zone, updatedAt: now);
+    final currentPort =
+        harborPortById(currentPortId) ?? _firstPortForRegion(zone);
+    final destinationPort =
+        harborPortById(destinationPortId) ?? _firstPortForRegion(route);
+    _currentZones[id] = CurrentZone(
+      userId: id,
+      zone: zone,
+      country: currentPort?.country,
+      portId: currentPort?.id,
+      updatedAt: now,
+    );
     _futureRoutes[id] = FutureRoute(
       id: '$id-route',
       userId: id,
       destinationZone: route,
+      destinationCountry: destinationPort?.country,
+      destinationPortId: destinationPort?.id,
       startPeriod: 'Hiver',
       endPeriod: 'Printemps',
       flexibility: RouteFlexibility.flexible,
@@ -1186,6 +1300,13 @@ class MockOceanMatchRepository implements OceanMatchRepository {
       zones: [zone, route],
       intentions: intentions,
     );
+  }
+
+  HarborPort? _firstPortForRegion(String region) {
+    for (final port in harborPorts) {
+      if (port.region == region) return port;
+    }
+    return null;
   }
 }
 

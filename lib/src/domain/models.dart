@@ -304,11 +304,13 @@ class CurrentZone {
     required this.zone,
     required this.updatedAt,
     this.country,
+    this.portId,
   });
 
   final String userId;
   final String zone;
   final String? country;
+  final String? portId;
   final DateTime updatedAt;
 }
 
@@ -323,11 +325,15 @@ class FutureRoute {
     required this.comment,
     required this.isActive,
     required this.updatedAt,
+    this.destinationCountry,
+    this.destinationPortId,
   });
 
   final String id;
   final String userId;
   final String destinationZone;
+  final String? destinationCountry;
+  final String? destinationPortId;
   final String startPeriod;
   final String endPeriod;
   final RouteFlexibility flexibility;
@@ -342,11 +348,15 @@ class FutureRoute {
     RouteFlexibility? flexibility,
     String? comment,
     bool? isActive,
+    String? destinationCountry,
+    String? destinationPortId,
   }) {
     return FutureRoute(
       id: id,
       userId: userId,
       destinationZone: destinationZone ?? this.destinationZone,
+      destinationCountry: destinationCountry ?? this.destinationCountry,
+      destinationPortId: destinationPortId ?? this.destinationPortId,
       startPeriod: startPeriod ?? this.startPeriod,
       endPeriod: endPeriod ?? this.endPeriod,
       flexibility: flexibility ?? this.flexibility,
@@ -355,6 +365,52 @@ class FutureRoute {
       updatedAt: DateTime.now(),
     );
   }
+}
+
+class HarborPort {
+  const HarborPort({
+    required this.id,
+    required this.name,
+    required this.country,
+    required this.region,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  final String id;
+  final String name;
+  final String country;
+  final String region;
+  final double latitude;
+  final double longitude;
+
+  String get displayName => '$name, $country';
+
+  bool matches(String query) {
+    final normalized = query.trim().toLowerCase();
+    if (normalized.isEmpty) return true;
+    return name.toLowerCase().contains(normalized) ||
+        country.toLowerCase().contains(normalized) ||
+        region.toLowerCase().contains(normalized);
+  }
+}
+
+class PortActivity {
+  const PortActivity({
+    required this.port,
+    required this.currentCount,
+    required this.destinationCount,
+    required this.isCurrentUserHere,
+    required this.isCurrentUserGoing,
+  });
+
+  final HarborPort port;
+  final int currentCount;
+  final int destinationCount;
+  final bool isCurrentUserHere;
+  final bool isCurrentUserGoing;
+
+  int get totalCount => currentCount + destinationCount;
 }
 
 class Preferences {

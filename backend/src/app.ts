@@ -7,6 +7,7 @@ import { installSecurityMiddleware } from './middleware/security.js';
 import { authRouter } from './routes/auth-routes.js';
 import { discoveryRouter } from './routes/discovery-routes.js';
 import { messagingRouter } from './routes/messaging-routes.js';
+import { portsRouter } from './routes/ports-routes.js';
 import { profileRouter } from './routes/profile-routes.js';
 import { socialRouter } from './routes/social-routes.js';
 
@@ -32,6 +33,7 @@ export function createApp() {
 
   app.use('/v1/auth', authRouter());
   app.use('/v1', requireAuth, profileRouter());
+  app.use('/v1', requireAuth, portsRouter());
   app.use('/v1', requireAuth, discoveryRouter());
   app.use('/v1', requireAuth, socialRouter());
   app.use('/v1', requireAuth, messagingRouter());

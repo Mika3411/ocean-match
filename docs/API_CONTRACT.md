@@ -45,7 +45,21 @@ Regles :
 
 - une seule route future active dans le MVP ;
 - zone actuelle large uniquement ;
-- port exact et coordonnees GPS jamais visibles publiquement.
+- port selectionne depuis le catalogue uniquement ;
+- compteurs de ports agreges seulement, jamais de quai, ponton ou GPS public.
+
+## Ports
+
+```text
+GET /ports
+```
+
+Retour :
+
+- catalogue de ports avec nom, pays, region et coordonnees de carte ;
+- `currentCount` : profils actifs, verifies, complets et visibles qui indiquent ce port ;
+- `destinationCount` : profils actifs, verifies, complets et visibles qui vont vers ce port ;
+- `isCurrentUserHere` et `isCurrentUserGoing` pour l etat de l utilisateur courant.
 
 ## Photos
 

@@ -4,6 +4,7 @@ import '../../app.dart';
 import '../../core/app_theme.dart';
 import 'discovery_screen.dart';
 import 'messages_screen.dart';
+import 'ports_screen.dart';
 import 'profile_screen.dart';
 import 'settings_screen.dart';
 
@@ -29,7 +30,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
   @override
   Widget build(BuildContext context) {
     final pages = [
-      DiscoveryScreen(onOpenMessages: () => setState(() => _index = 1)),
+      DiscoveryScreen(onOpenMessages: () => setState(() => _index = 2)),
+      const PortsScreen(),
       const MessagesScreen(),
       const ProfileScreen(),
       const SettingsScreen(),
@@ -62,6 +64,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
               icon: Icon(Icons.explore_outlined),
               selectedIcon: Icon(Icons.explore),
               label: 'Decouvrir',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.map_outlined),
+              selectedIcon: Icon(Icons.map),
+              label: 'Ports',
             ),
             NavigationDestination(
               icon: Icon(Icons.chat_bubble_outline),

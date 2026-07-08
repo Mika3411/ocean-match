@@ -18,6 +18,7 @@ const publicText = (min: number, max: number) =>
     });
 
 const uuid = z.string().uuid();
+const portId = z.string().trim().min(2).max(80);
 
 export const paramsIdSchema = z.object({ id: uuid });
 export const conversationParamsSchema = z.object({ id: uuid });
@@ -97,11 +98,13 @@ export const lifeAboardSchema = z.object({
 export const currentZoneSchema = z.object({
   zone: publicText(2, 120),
   country: z.string().trim().min(2).max(80).optional(),
+  portId: portId.optional(),
 });
 
 export const futureRouteSchema = z.object({
   destinationZone: publicText(2, 120),
   destinationCountry: z.string().trim().min(2).max(80).optional(),
+  destinationPortId: portId.optional(),
   startPeriod: z.string().trim().min(1).max(80),
   endPeriod: z.string().trim().min(1).max(80),
   flexibility: routeFlexibilitySchema,

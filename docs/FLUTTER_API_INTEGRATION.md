@@ -69,6 +69,7 @@ completeOnboarding      -> PUT /profile, POST /photos, PUT /life-aboard,
                             PUT /current-zone, PUT /future-route, PUT /preferences
 updateCurrentZone       -> PUT /current-zone
 updateFutureRoute       -> PUT /future-route
+getPortActivities       -> GET /ports
 getDiscoveryProfiles    -> GET /discovery
 likeProfile             -> POST /likes
 passProfile             -> POST /passes
@@ -163,7 +164,8 @@ La reponse contient :
 ```json
 {
   "zone": "Canaries",
-  "country": "Espagne"
+  "country": "Espagne",
+  "portId": "las-palmas"
 }
 ```
 
@@ -172,10 +174,34 @@ La reponse contient :
 ```json
 {
   "destinationZone": "Caraibes",
+  "destinationPortId": "le-marin",
   "startPeriod": "Hiver",
   "endPeriod": "Printemps",
   "flexibility": "flexible",
   "comment": ""
+}
+```
+
+`GET /ports` :
+
+```json
+{
+  "ports": [
+    {
+      "port": {
+        "id": "las-palmas",
+        "name": "Las Palmas",
+        "country": "Espagne",
+        "region": "Canaries",
+        "latitude": 28.1235,
+        "longitude": -15.4363
+      },
+      "currentCount": 12,
+      "destinationCount": 8,
+      "isCurrentUserHere": true,
+      "isCurrentUserGoing": false
+    }
+  ]
 }
 ```
 

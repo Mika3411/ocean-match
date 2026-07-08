@@ -255,8 +255,15 @@ class _WelcomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final availableWidth = screenWidth - (compact ? 48 : 96);
-    final maxLogoWidth = compact ? 342.0 : 620.0;
-    final logoWidth = math.max(180.0, math.min(maxLogoWidth, availableWidth));
+    final contentWidth = math.max(
+      180.0,
+      math.min(compact ? 420.0 : 610.0, availableWidth),
+    );
+    final maxLogoWidth = compact ? 390.0 : 620.0;
+    final logoWidth = math.max(
+      180.0,
+      math.min(maxLogoWidth, contentWidth),
+    );
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -274,38 +281,42 @@ class _WelcomeContent extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: compact ? 30 : 42),
-        Text(
-          'Rencontrez des personnes qui partagent la vie à bord.',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: OceanColors.cream,
-            fontFamily: OceanTypography.uiFamily,
-            fontFamilyFallback: OceanTypography.uiFallback,
-            fontSize: compact ? 22 : 28,
-            fontWeight: FontWeight.w600,
-            height: 1.18,
-            letterSpacing: 0,
+        SizedBox(height: compact ? 28 : 42),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: contentWidth),
+          child: Text(
+            'Rencontrez des personnes qui partagent la vie à bord.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: OceanColors.cream,
+              fontFamily: OceanTypography.uiFamily,
+              fontFamilyFallback: OceanTypography.uiFallback,
+              fontSize: compact ? 21 : 28,
+              fontWeight: FontWeight.w700,
+              height: 1.15,
+              letterSpacing: 0,
+            ),
           ),
         ),
-        SizedBox(height: compact ? 14 : 16),
+        SizedBox(height: compact ? 12 : 16),
         ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 610),
+          constraints: BoxConstraints(maxWidth: contentWidth),
           child: Text(
             'Une application de rencontre pour celles et ceux qui vivent, naviguent ou rêvent de vie en bateau.',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: OceanColors.cream.withValues(alpha: 0.78),
-                  fontSize: compact ? 16 : 18,
+                  fontSize: compact ? 15.5 : 18,
                   fontWeight: FontWeight.w400,
-                  height: 1.5,
+                  height: 1.45,
                   letterSpacing: 0,
                 ),
           ),
         ),
-        SizedBox(height: compact ? 34 : 42),
+        SizedBox(height: compact ? 30 : 42),
         _WelcomeActions(
           compact: compact,
+          maxWidth: contentWidth,
           isBusy: isBusy,
           onShowAuth: onShowAuth,
         ),
@@ -317,11 +328,13 @@ class _WelcomeContent extends StatelessWidget {
 class _WelcomeActions extends StatelessWidget {
   const _WelcomeActions({
     required this.compact,
+    required this.maxWidth,
     required this.isBusy,
     required this.onShowAuth,
   });
 
   final bool compact;
+  final double maxWidth;
   final bool isBusy;
   final ValueChanged<_AuthMode> onShowAuth;
 
@@ -362,23 +375,29 @@ class _WelcomeActions extends StatelessWidget {
     );
 
     if (compact) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          createButton,
-          const SizedBox(height: 10),
-          loginButton,
-        ],
+      return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            createButton,
+            const SizedBox(height: 10),
+            loginButton,
+          ],
+        ),
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        createButton,
-        const SizedBox(width: 14),
-        loginButton,
-      ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          createButton,
+          const SizedBox(width: 14),
+          loginButton,
+        ],
+      ),
     );
   }
 }

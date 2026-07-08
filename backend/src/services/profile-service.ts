@@ -59,6 +59,14 @@ async function getSingle(client: DbClient, sql: string, values: unknown[]) {
   return result.rows[0] ?? null;
 }
 
+async function getPortOrThrow(client: DbClient, portId: string) {
+  const port = await getSingle(client, `SELECT * FROM ports WHERE id = $1`, [portId]);
+  if (!port) {
+    throw new BadRequestError('Port introuvable.');
+  }
+  return port;
+}
+
 export class ProfileService {
   constructor(private readonly storage: PhotoStorage = photoStorage) {}
 
@@ -193,19 +201,23 @@ export class ProfileService {
     });
   }
 
-  async putCurrentZone(userId: string, input: { zone: string; country?: string }) {
+  async putCurrentZone(userId: string, input: { zone: string; country?: string; portId?: string }) {
     return withTransaction(async (client) => {
       await authService.requireActiveVerifiedUser(client, userId);
+      const port = input.portId ? await getPortOrThrow(client, input.portId) : null;
+      const zone = port ? String(port.region) : input.zone;
+      const country = port ? String(port.country) : (input.country ?? null);
       const result = await client.query<Row>(
         `
-          INSERT INTO current_zones (user_id, zone, country)
-          VALUES ($1, $2, $3)
+          INSERT INTO current_zones (user_id, zone, country, port_id)
+          VALUES ($1, $2, $3, $4)
           ON CONFLICT (user_id) DO UPDATE
           SET zone = EXCLUDED.zone,
-              country = EXCLUDED.country
+              country = EXCLUDED.country,
+              port_id = EXCLUDED.port_id
           RETURNING *
         `,
-        [userId, input.zone, input.country ?? null],
+        [userId, zone, country, port?.id ?? null],
       );
       await refreshProfileCompleteness(client, userId);
       return serializeCurrentZone(result.rows[0]);
@@ -217,6 +229,7 @@ export class ProfileService {
     input: {
       destinationZone: string;
       destinationCountry?: string;
+      destinationPortId?: string;
       startPeriod: string;
       endPeriod: string;
       flexibility: string;
@@ -225,6 +238,13 @@ export class ProfileService {
   ) {
     return withTransaction(async (client) => {
       await authService.requireActiveVerifiedUser(client, userId);
+      const port = input.destinationPortId
+        ? await getPortOrThrow(client, input.destinationPortId)
+        : null;
+      const destinationZone = port ? String(port.region) : input.destinationZone;
+      const destinationCountry = port
+        ? String(port.country)
+        : (input.destinationCountry ?? null);
       await client.query(`UPDATE future_routes SET is_active = false WHERE user_id = $1 AND is_active`, [
         userId,
       ]);
@@ -234,19 +254,21 @@ export class ProfileService {
             user_id,
             destination_zone,
             destination_country,
+            destination_port_id,
             start_period,
             end_period,
             flexibility,
             comment,
             is_active
           )
-          VALUES ($1, $2, $3, $4, $5, $6, $7, true)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
           RETURNING *
         `,
         [
           userId,
-          input.destinationZone,
-          input.destinationCountry ?? null,
+          destinationZone,
+          destinationCountry,
+          port?.id ?? null,
           input.startPeriod,
           input.endPeriod,
           input.flexibility,

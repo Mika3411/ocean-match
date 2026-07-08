@@ -65,6 +65,7 @@ export function serializeCurrentZone(row: Record<string, unknown> | undefined | 
     userId: row.user_id,
     zone: row.zone,
     country: row.country,
+    portId: row.port_id,
     updatedAt: row.updated_at,
   };
 }
@@ -76,12 +77,34 @@ export function serializeFutureRoute(row: Record<string, unknown> | undefined | 
     userId: row.user_id,
     destinationZone: row.destination_zone,
     destinationCountry: row.destination_country,
+    destinationPortId: row.destination_port_id,
     startPeriod: row.start_period,
     endPeriod: row.end_period,
     flexibility: row.flexibility,
     comment: row.comment,
     isActive: row.is_active,
     updatedAt: row.updated_at,
+  };
+}
+
+export function serializePort(row: Record<string, unknown>) {
+  return {
+    id: row.id,
+    name: row.name,
+    country: row.country,
+    region: row.region,
+    latitude: Number(row.latitude),
+    longitude: Number(row.longitude),
+  };
+}
+
+export function serializePortActivity(row: Record<string, unknown>) {
+  return {
+    port: serializePort(row),
+    currentCount: Number(row.current_count ?? 0),
+    destinationCount: Number(row.destination_count ?? 0),
+    isCurrentUserHere: Boolean(row.is_current_user_here),
+    isCurrentUserGoing: Boolean(row.is_current_user_going),
   };
 }
 

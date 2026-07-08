@@ -15,17 +15,17 @@ class AppLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final markSize = compact ? 40.0 : 52.0;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PremiumLogoMark(size: markSize),
-        const SizedBox(width: 12),
-        GoldText(
-          'BlueWater Match',
-          style: OceanTypography.brand(context, compact: compact),
+    return Semantics(
+      image: true,
+      label: 'BlueWater Match',
+      child: SizedBox(
+        width: compact ? 220 : 250,
+        child: Image.asset(
+          bwmLogoFinalAsset,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.high,
         ),
-      ],
+      ),
     );
   }
 }
@@ -84,64 +84,14 @@ class GoldText extends StatelessWidget {
   Widget build(BuildContext context) {
     final resolvedStyle =
         style ?? Theme.of(context).textTheme.titleLarge ?? const TextStyle();
-    final fontSize = resolvedStyle.fontSize ?? 32;
-    final strokeWidth = (fontSize * 0.032).clamp(1.0, 2.6).toDouble();
-    final strokeStyle = resolvedStyle.copyWith(
-      foreground: Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = strokeWidth
-        ..strokeJoin = StrokeJoin.round
-        ..color = const Color(0xFF6D3506),
-      shadows: OceanTypography.goldTitleShadows,
-    );
-    final fillStyle = resolvedStyle.copyWith(
-      color: Colors.white,
-      shadows: const [
-        Shadow(
-          color: Color(0x99FFFFFF),
-          offset: Offset(-0.5, -0.7),
-          blurRadius: 0.8,
-        ),
-      ],
-    );
-
-    Widget textWithStyle(TextStyle textStyle) {
-      return Text(
-        text,
-        maxLines: maxLines,
-        overflow: overflow,
-        semanticsLabel: semanticsLabel,
-        softWrap: softWrap,
-        style: textStyle,
-        textAlign: textAlign,
-      );
-    }
-
-    Widget strokeText() {
-      return RichText(
-        maxLines: maxLines,
-        overflow: overflow ?? TextOverflow.clip,
-        softWrap: softWrap ?? true,
-        text: TextSpan(text: text, style: strokeStyle),
-        textAlign: textAlign ?? TextAlign.start,
-        textDirection: Directionality.of(context),
-      );
-    }
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        ExcludeSemantics(child: strokeText()),
-        ShaderMask(
-          blendMode: BlendMode.srcIn,
-          shaderCallback: (bounds) {
-            return OceanTypography.goldGradient.createShader(
-              Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-            );
-          },
-          child: textWithStyle(fillStyle),
-        ),
-      ],
+    return Text(
+      text,
+      maxLines: maxLines,
+      overflow: overflow,
+      semanticsLabel: semanticsLabel,
+      softWrap: softWrap,
+      style: resolvedStyle.copyWith(shadows: const []),
+      textAlign: textAlign,
     );
   }
 }
@@ -161,12 +111,13 @@ class OceanBackground extends StatelessWidget {
     return DecoratedBox(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [
-            OceanColors.abyss,
-            OceanColors.midnight,
             OceanColors.deep,
+            OceanColors.navy,
+            OceanColors.deep,
+            OceanColors.obsidian,
           ],
         ),
       ),
@@ -436,7 +387,7 @@ class PrivacyNote extends StatelessWidget {
           SizedBox(width: 10),
           Expanded(
             child: Text(
-              'Votre position exacte de bateau n est jamais affichee. BlueWater Match utilise seulement des zones larges.',
+              'Votre position exacte de bateau n est jamais affichee. BlueWater Match utilise des zones larges et des compteurs de ports agreges.',
             ),
           ),
         ],
