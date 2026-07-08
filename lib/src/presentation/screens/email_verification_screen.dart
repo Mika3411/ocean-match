@@ -58,7 +58,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
             SectionCard(
               title: 'Email requis',
               subtitle:
-                  'Dans le MVP local, le bouton ci-dessous simule le retour du lien de verification.',
+                  'En developpement local, le bouton ci-dessous utilise le token de verification renvoye par l API.',
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [

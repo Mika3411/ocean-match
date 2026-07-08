@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ocean_match/src/app.dart';
+import 'package:ocean_match/src/data/ocean_match_repository.dart';
 
 void main() {
   Future<void> pumpApp(WidgetTester tester) async {
-    await tester.pumpWidget(const OceanMatchApp());
+    await tester.pumpWidget(
+      OceanMatchApp(repository: MockOceanMatchRepository()),
+    );
     await tester.pumpAndSettle();
   }
 

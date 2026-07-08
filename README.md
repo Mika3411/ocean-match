@@ -4,17 +4,33 @@ Application Flutter iOS/Android pour tester le concept BlueWater Match : une app
 
 ## Statut
 
-Le workspace contient le code source Flutter du MVP avec une architecture propre et un repository mock en memoire. Le SDK Flutter n est pas installe sur cette machine, donc les dossiers natifs `ios/` et `android/` n ont pas ete generes ici.
+Le workspace contient le code source Flutter du MVP avec une architecture propre.
+Par defaut, l app utilise maintenant l API REST pour sauvegarder les
+inscriptions, connexions, verifications email et publications de profil dans
+PostgreSQL. Le repository mock reste disponible pour les tests et les parcours
+demo.
 
 Pour lancer localement apres installation Flutter :
 
 ```bash
-flutter create .
 flutter pub get
-flutter run
+flutter run --dart-define=OCEAN_MATCH_API_URL=http://localhost:8080/v1
 ```
 
-`flutter create .` ajoute les projets natifs iOS/Android sans ecraser `lib/` ni `pubspec.yaml` si vous refusez les conflits eventuels.
+Sur emulateur Android, utilisez plutot :
+
+```bash
+flutter run --dart-define=OCEAN_MATCH_API_URL=http://10.0.2.2:8080/v1
+```
+
+Pour revenir au mock en developpement :
+
+```bash
+flutter run --dart-define=OCEAN_MATCH_USE_MOCK_REPOSITORY=true
+```
+
+Le backend doit etre lance et migre pour que les nouvelles inscriptions soient
+persistantes. Voir `docs/BACKEND.md`.
 
 ## Compte test
 
@@ -27,7 +43,8 @@ Mot de passe: password-demo
 
 Le mock accepte aussi `password123` pour ce compte test.
 
-Ce compte arrive directement sur Decouvrir.
+Ce compte arrive directement sur Decouvrir. Avec l API reelle, creez ou migrez
+les comptes en base avant de vous connecter.
 
 ## Parcours MVP inclus
 
@@ -65,7 +82,9 @@ lib/
       widgets/
 ```
 
-Le controller expose les cas d usage a l UI. Le repository mock applique deja les regles serveur critiques :
+Le controller expose les cas d usage a l UI. L implementation API persiste les
+donnees serveur et le repository mock applique les regles critiques pendant les
+tests :
 
 - pas de decouverte sans email verifie et profil complet ;
 - pas de position exacte affichee ;
@@ -75,9 +94,9 @@ Le controller expose les cas d usage a l UI. Le repository mock applique deja le
 - signalements conserves ;
 - compte supprime invisible.
 
-## Backend futur
+## Backend
 
-Un socle backend personnalise est maintenant disponible dans `backend/` :
+Un socle backend personnalise est disponible dans `backend/` :
 
 - API REST Node/TypeScript ;
 - PostgreSQL via `backend/migrations/001_init.sql` ;
@@ -86,15 +105,9 @@ Un socle backend personnalise est maintenant disponible dans `backend/` :
 - stockage photo externe prepare ;
 - schema pret pour Premium.
 
-Remplacer `MockOceanMatchRepository` par une implementation API dans `lib/src/data/`, en gardant l interface `OceanMatchRepository`.
-
-Exemples futurs :
-
-- `ApiOceanMatchRepository`
-- `AuthApiClient`
-- `ProfilesApiClient`
-- `MessagingApiClient`
-- `PhotoStorageClient`
+L app Flutter branche `ApiOceanMatchRepository` par defaut via
+`createDefaultOceanMatchRepository()`. Les tests injectent explicitement
+`MockOceanMatchRepository`.
 
 Voir `docs/ARCHITECTURE.md` et `docs/API_CONTRACT.md`.
 

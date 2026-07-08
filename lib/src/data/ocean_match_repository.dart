@@ -131,6 +131,37 @@ class MockOceanMatchRepository implements OceanMatchRepository {
     _accounts[userId] = account.copyWith(status: status);
   }
 
+  void syncApiAccount(UserAccount account, {String? password}) {
+    _accounts[account.id] = account;
+    if (password != null && password.isNotEmpty) {
+      _passwords[account.id] = password;
+    }
+  }
+
+  void syncApiProfileSnapshot({
+    Profile? profile,
+    List<ProfilePhoto>? photos,
+    LifeAboard? lifeAboard,
+    CurrentZone? currentZone,
+    FutureRoute? futureRoute,
+    Preferences? preferences,
+  }) {
+    if (profile != null) {
+      _profiles[profile.userId] = profile;
+    }
+    final userId = profile?.userId ??
+        lifeAboard?.userId ??
+        currentZone?.userId ??
+        futureRoute?.userId ??
+        preferences?.userId;
+    if (userId == null) return;
+    if (photos != null) _photos[userId] = photos;
+    if (lifeAboard != null) _lifeAboard[userId] = lifeAboard;
+    if (currentZone != null) _currentZones[userId] = currentZone;
+    if (futureRoute != null) _futureRoutes[userId] = futureRoute;
+    if (preferences != null) _preferences[userId] = preferences;
+  }
+
   @override
   Future<UserAccount> signUp({
     required String email,

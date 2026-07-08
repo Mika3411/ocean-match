@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'application/ocean_match_controller.dart';
 import 'core/app_theme.dart';
+import 'data/api_ocean_match_repository.dart';
 import 'data/ocean_match_repository.dart';
 import 'presentation/screens/auth_gate.dart';
 
 class OceanMatchApp extends StatefulWidget {
-  const OceanMatchApp({super.key});
+  const OceanMatchApp({super.key, this.repository});
+
+  final OceanMatchRepository? repository;
 
   @override
   State<OceanMatchApp> createState() => _OceanMatchAppState();
@@ -19,7 +22,7 @@ class _OceanMatchAppState extends State<OceanMatchApp> {
   void initState() {
     super.initState();
     _controller = OceanMatchController(
-      repository: MockOceanMatchRepository(),
+      repository: widget.repository ?? createDefaultOceanMatchRepository(),
     );
   }
 

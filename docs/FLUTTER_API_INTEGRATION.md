@@ -1,12 +1,22 @@
 # Integration Flutter avec l API BlueWater Match
 
-L app Flutter actuelle utilise `OceanMatchRepository`. L integration backend se
-fait en ajoutant une implementation `ApiOceanMatchRepository` dans
-`lib/src/data/`, sans changer les ecrans.
+L app Flutter utilise `OceanMatchRepository`. Le branchement par defaut passe
+par `ApiOceanMatchRepository` dans `lib/src/data/api_ocean_match_repository.dart`
+pour sauvegarder dans l API :
+
+- inscription, connexion, verification email et renvoi de verification ;
+- demande de reinitialisation de mot de passe ;
+- publication d onboarding (`profile`, `life-aboard`, `current-zone`,
+  `future-route`, `preferences`) ;
+- mise a jour des zones/routes principales ;
+- suppression de compte.
+
+Les autres surfaces du MVP continuent d utiliser le socle mock local tant que
+leurs endpoints ne sont pas tous branches dans Flutter.
 
 ## Configuration
 
-Ajouter une configuration d environnement cote Flutter :
+Configuration d environnement cote Flutter :
 
 ```dart
 const apiBaseUrl = String.fromEnvironment(
@@ -15,6 +25,9 @@ const apiBaseUrl = String.fromEnvironment(
 );
 ```
 
+Si `OCEAN_MATCH_API_URL` n est pas fourni, l app utilise `http://localhost:8080/v1`,
+ou `http://10.0.2.2:8080/v1` sur emulateur Android.
+
 Lancement web ou desktop local :
 
 ```bash
@@ -22,6 +35,12 @@ flutter run --dart-define=OCEAN_MATCH_API_URL=http://localhost:8080/v1
 ```
 
 Sur emulateur Android, utiliser plutot `http://10.0.2.2:8080/v1`.
+
+Pour forcer le repository mock :
+
+```bash
+flutter run --dart-define=OCEAN_MATCH_USE_MOCK_REPOSITORY=true
+```
 
 ## Auth et stockage des tokens
 
@@ -45,12 +64,17 @@ Responses auth :
 }
 ```
 
-Recommandations Flutter :
+Etat actuel :
+
+- les access/refresh tokens sont conserves en memoire ;
+- l access token est envoye sur les routes protegees deja branchees ;
+- si l API retourne `401`, le repository tente `POST /auth/refresh`, puis
+  rejoue la requete.
+
+Recommandations restantes avant production :
 
 - stocker `refreshToken` dans `flutter_secure_storage` ;
 - garder `accessToken` en memoire ou stockage securise court ;
-- envoyer `Authorization: Bearer <accessToken>` sur toutes les routes `/v1/*` ;
-- si l API retourne `401`, appeler `POST /auth/refresh`, puis rejouer la requete ;
 - appeler `POST /auth/logout` avec le refresh token lors de la deconnexion.
 
 ## Mapping repository
